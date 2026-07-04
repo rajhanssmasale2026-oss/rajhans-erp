@@ -1,9 +1,7 @@
-import products from "../data/products";
-
-function ProductTable() {
+function ProductTable({ products }) {
   return (
     <div style={{ padding: "20px" }}>
-      <h2>📦 Product Master</h2>
+      <h2>📦 Product List</h2>
 
       <table
         border="1"
@@ -18,9 +16,9 @@ function ProductTable() {
           <tr>
             <th>Code</th>
             <th>Product</th>
-            <th>Weight</th>
-            <th>Purchase</th>
-            <th>Sale</th>
+            <th>Pack</th>
+            <th>Purchase Price</th>
+            <th>Sale Price</th>
             <th>Stock</th>
           </tr>
         </thead>
@@ -31,8 +29,8 @@ function ProductTable() {
               <td>{product.code}</td>
               <td>{product.name}</td>
               <td>{product.weight}</td>
-              <td>{product.purchasePrice || "Pending"}</td>
-              <td>{product.salePrice || "Pending"}</td>
+              <td>₹ {product.purchasePrice}</td>
+              <td>₹ {product.salePrice}</td>
               <td>{product.stock}</td>
             </tr>
           ))}

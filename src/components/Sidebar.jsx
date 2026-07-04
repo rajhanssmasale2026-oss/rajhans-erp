@@ -1,28 +1,44 @@
 function Sidebar() {
   const menuItems = [
-    "🏠 Dashboard",
-    "📦 Products",
-    "🧾 Sales",
-    "🛒 Purchase",
-    "👥 Customers",
-    "📊 Reports",
-    "⚙️ Settings",
+    { icon: "🏠", name: "Dashboard" },
+    { icon: "📦", name: "Products" },
+    { icon: "🧾", name: "Sales" },
+    { icon: "🛒", name: "Purchase" },
+    { icon: "👥", name: "Customers" },
+    { icon: "📊", name: "Reports" },
+    { icon: "⚙️", name: "Settings" },
   ];
 
   return (
-    <aside className="w-64 min-h-screen bg-gray-900 text-white p-5">
-      <h2 className="text-xl font-bold mb-6">Menu</h2>
+    <aside className="w-64 min-h-screen bg-gray-900 text-white flex flex-col">
+      <div className="p-6 border-b border-gray-700">
+        <h2 className="text-2xl font-bold text-orange-400">
+          🌶️ Rajhans Masale
+        </h2>
+        <p className="text-sm text-gray-300">
+          ERP Version 1.0
+        </p>
+      </div>
 
-      <ul className="space-y-2">
-        {menuItems.map((item) => (
+      <ul className="flex-1 p-4 space-y-2">
+        {menuItems.map((item, index) => (
           <li
-            key={item}
-            className="p-3 rounded-lg hover:bg-blue-600 cursor-pointer"
+            key={item.name}
+            className={`p-3 rounded-lg cursor-pointer transition-all duration-300 ${
+              index === 0
+                ? "bg-orange-500 text-white"
+                : "hover:bg-blue-600"
+            }`}
           >
-            {item}
+            <span className="mr-3">{item.icon}</span>
+            {item.name}
           </li>
         ))}
       </ul>
+
+      <div className="p-4 border-t border-gray-700 text-center text-sm text-gray-400">
+        Developed for Rajhans Masale ❤️
+      </div>
     </aside>
   );
 }

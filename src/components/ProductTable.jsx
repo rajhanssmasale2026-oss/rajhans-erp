@@ -1,4 +1,4 @@
-function ProductTable({ products }) {
+function ProductTable({ products, onDelete }) {
   return (
     <div style={{ padding: "20px" }}>
       <h2>📦 Product List</h2>
@@ -20,6 +20,7 @@ function ProductTable({ products }) {
             <th>Purchase Price</th>
             <th>Sale Price</th>
             <th>Stock</th>
+            <th>Action</th>
           </tr>
         </thead>
 
@@ -32,6 +33,22 @@ function ProductTable({ products }) {
               <td>₹ {product.purchasePrice}</td>
               <td>₹ {product.salePrice}</td>
               <td>{product.stock}</td>
+
+              <td>
+                <button
+                  onClick={() => onDelete(product.code)}
+                  style={{
+                    background: "#dc2626",
+                    color: "white",
+                    border: "none",
+                    padding: "8px 14px",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                  }}
+                >
+                  🗑 Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

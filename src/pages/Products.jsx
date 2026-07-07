@@ -1,19 +1,17 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ProductContext } from "../context/ProductContext";
+
 import ProductForm from "../components/ProductForm";
 import ProductTable from "../components/ProductTable";
-import productsData from "../data/products";
 
 function Products() {
-  const [products, setProducts] = useState(productsData);
+  const { products, addProduct, deleteProduct } = useContext(ProductContext);
 
-  const handleAddProduct = (newProduct) => {
-    const product = {
-      ...newProduct,
-      code: "RJM" + String(products.length + 1).padStart(3, "0"),
-    };
+  const [search, setSearch] = useState("");
 
-    setProducts([...products, product]);
-  };
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -21,10 +19,21 @@ function Products() {
         📦 Product Master
       </h1>
 
-      <ProductForm onSave={handleAddProduct} />
+      <ProductForm onSave={addProduct} />
 
       <div className="bg-white rounded-xl shadow-lg p-6 mt-6">
-        <ProductTable products={products} />
+        <input
+          type="text"
+          placeholder="🔍 Search Product..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="border rounded-lg p-3 w-full mb-4"
+        />
+
+        <ProductTable
+          products={filteredProducts}
+          onDelete={deleteProduct}
+        />
       </div>
     </div>
   );

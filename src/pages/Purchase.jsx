@@ -3,11 +3,14 @@ import { useContext, useState } from "react";
 import { RawMaterialContext } from "../context/RawMaterialContext";
 import { PurchaseContext } from "../context/PurchaseContext";
 
+import suppliers from "../data/suppliers";
+
 function Purchase() {
   const { rawMaterials, updateStock } = useContext(RawMaterialContext);
   const { addPurchase } = useContext(PurchaseContext);
 
   const [purchase, setPurchase] = useState({
+    supplier: "",
     material: "",
     quantity: "",
     rate: "",
@@ -21,7 +24,12 @@ function Purchase() {
   };
 
   const handleSave = () => {
-    if (!purchase.material || !purchase.quantity || !purchase.rate) {
+    if (
+      !purchase.supplier ||
+      !purchase.material ||
+      !purchase.quantity ||
+      !purchase.rate
+    ) {
       alert("Please fill all fields");
       return;
     }
@@ -29,11 +37,11 @@ function Purchase() {
     addPurchase({
       ...purchase,
       total:
-        Number(purchase.quantity) * Number(purchase.rate),
+        Number(purchase.quantity) *
+        Number(purchase.rate),
       date: new Date().toLocaleDateString(),
     });
 
-    // Raw Material Stock Increase
     updateStock(
       purchase.material,
       purchase.quantity
@@ -42,6 +50,7 @@ function Purchase() {
     alert("Purchase Saved Successfully");
 
     setPurchase({
+      supplier: "",
       material: "",
       quantity: "",
       rate: "",
@@ -55,7 +64,30 @@ function Purchase() {
         🛒 Raw Material Purchase
       </h1>
 
+
       <div className="bg-white p-6 rounded-xl shadow-lg">
+
+
+        <select
+          name="supplier"
+          value={purchase.supplier}
+          onChange={handleChange}
+          className="border rounded-lg p-3 w-full mb-4"
+        >
+
+          <option value="">
+            Select Supplier
+          </option>
+
+          {suppliers.map((item) => (
+            <option key={item.id} value={item.name}>
+              {item.name}
+            </option>
+          ))}
+
+        </select>
+
+
 
         <select
           name="material"
@@ -63,6 +95,7 @@ function Purchase() {
           onChange={handleChange}
           className="border rounded-lg p-3 w-full mb-4"
         >
+
           <option value="">
             Select Raw Material
           </option>
@@ -76,6 +109,7 @@ function Purchase() {
         </select>
 
 
+
         <input
           type="number"
           name="quantity"
@@ -84,6 +118,7 @@ function Purchase() {
           onChange={handleChange}
           className="border rounded-lg p-3 w-full mb-4"
         />
+
 
 
         <input
@@ -96,12 +131,14 @@ function Purchase() {
         />
 
 
+
         <button
           onClick={handleSave}
           className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700"
         >
           💾 Save Purchase
         </button>
+
 
       </div>
 

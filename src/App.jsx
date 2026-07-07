@@ -4,14 +4,30 @@ import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
 import Purchase from "./pages/Purchase";
 import RawMaterials from "./pages/RawMaterials";
+import Suppliers from "./pages/Suppliers";
+import Sales from "./pages/Sales";
+import Customers from "./pages/Customers";
 
 function App() {
   return (
     <Routes>
+
       <Route path="/" element={<Dashboard />} />
+
+      <Route path="/dashboard" element={<Dashboard />} />
+
       <Route path="/products" element={<Products />} />
+
       <Route path="/purchase" element={<Purchase />} />
+
       <Route path="/raw-materials" element={<RawMaterials />} />
+
+      <Route path="/suppliers" element={<Suppliers />} />
+
+      <Route path="/sales" element={<Sales />} />
+
+      <Route path="/customers" element={<Customers />} />
+
     </Routes>
   );
 }

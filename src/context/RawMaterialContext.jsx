@@ -4,10 +4,11 @@ import rawMaterialsData from "../data/rawMaterials";
 export const RawMaterialContext = createContext();
 
 export function RawMaterialProvider({ children }) {
+
   const [rawMaterials, setRawMaterials] = useState(() => {
-    const saved = localStorage.getItem("rawMaterials");
-    return saved ? JSON.parse(saved) : rawMaterialsData;
+    return rawMaterialsData;
   });
+
 
   useEffect(() => {
     localStorage.setItem(
@@ -16,26 +17,55 @@ export function RawMaterialProvider({ children }) {
     );
   }, [rawMaterials]);
 
+
+  // New Raw Material Add
   const addRawMaterial = (item) => {
     const newItem = {
-      ...item,
+      id: Date.now(),
       code: "RM" + String(rawMaterials.length + 1).padStart(3, "0"),
+      ...item,
     };
 
-    setRawMaterials([...rawMaterials, newItem]);
+    setRawMaterials((prev) => [
+      ...prev,
+      newItem,
+    ]);
   };
 
-  const deleteRawMaterial = (code) => {
-    setRawMaterials(
-      rawMaterials.filter((item) => item.code !== code)
+
+  // Purchase झाल्यावर Stock वाढवणे
+  const updateStock = (materialName, quantity) => {
+
+    setRawMaterials((prev) =>
+      prev.map((item) =>
+        item.name === materialName
+          ? {
+              ...item,
+              stock: Number(item.stock) + Number(quantity),
+            }
+          : item
+      )
     );
+
   };
+
+
+  // Delete Raw Material
+  const deleteRawMaterial = (code) => {
+
+    setRawMaterials((prev) =>
+      prev.filter((item) => item.code !== code)
+    );
+
+  };
+
 
   return (
     <RawMaterialContext.Provider
       value={{
         rawMaterials,
         addRawMaterial,
+        updateStock,
         deleteRawMaterial,
       }}
     >

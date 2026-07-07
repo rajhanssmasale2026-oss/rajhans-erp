@@ -1,13 +1,14 @@
 import { useContext, useState } from "react";
-import { ProductContext } from "../context/ProductContext";
+
+import { RawMaterialContext } from "../context/RawMaterialContext";
 import { PurchaseContext } from "../context/PurchaseContext";
 
 function Purchase() {
-  const { products } = useContext(ProductContext);
+  const { rawMaterials, updateStock } = useContext(RawMaterialContext);
   const { addPurchase } = useContext(PurchaseContext);
 
   const [purchase, setPurchase] = useState({
-    product: "",
+    material: "",
     quantity: "",
     rate: "",
   });
@@ -20,20 +21,28 @@ function Purchase() {
   };
 
   const handleSave = () => {
-    if (!purchase.product || !purchase.quantity || !purchase.rate) {
+    if (!purchase.material || !purchase.quantity || !purchase.rate) {
       alert("Please fill all fields");
       return;
     }
 
     addPurchase({
       ...purchase,
+      total:
+        Number(purchase.quantity) * Number(purchase.rate),
       date: new Date().toLocaleDateString(),
     });
+
+    // Raw Material Stock Increase
+    updateStock(
+      purchase.material,
+      purchase.quantity
+    );
 
     alert("Purchase Saved Successfully");
 
     setPurchase({
-      product: "",
+      material: "",
       quantity: "",
       rate: "",
     });
@@ -41,6 +50,7 @@ function Purchase() {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
+
       <h1 className="text-4xl font-bold mb-6">
         🛒 Raw Material Purchase
       </h1>
@@ -48,19 +58,23 @@ function Purchase() {
       <div className="bg-white p-6 rounded-xl shadow-lg">
 
         <select
-          name="product"
-          value={purchase.product}
+          name="material"
+          value={purchase.material}
           onChange={handleChange}
           className="border rounded-lg p-3 w-full mb-4"
         >
-          <option value="">Select Product</option>
+          <option value="">
+            Select Raw Material
+          </option>
 
-          {products.map((product) => (
-            <option key={product.code} value={product.name}>
-              {product.name}
+          {rawMaterials.map((item) => (
+            <option key={item.code} value={item.name}>
+              {item.name}
             </option>
           ))}
+
         </select>
+
 
         <input
           type="number"
@@ -71,6 +85,7 @@ function Purchase() {
           className="border rounded-lg p-3 w-full mb-4"
         />
 
+
         <input
           type="number"
           name="rate"
@@ -80,6 +95,7 @@ function Purchase() {
           className="border rounded-lg p-3 w-full mb-4"
         />
 
+
         <button
           onClick={handleSave}
           className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700"
@@ -88,6 +104,7 @@ function Purchase() {
         </button>
 
       </div>
+
     </div>
   );
 }

@@ -1,21 +1,22 @@
-function RawMaterials() {
+import { useContext } from "react";
+
+import RawMaterialForm from "../components/RawMaterialForm";
+import RawMaterialTable from "../components/RawMaterialTable";
+
+import { RawMaterialContext } from "../context/RawMaterialContext";
+
+export default function RawMaterials() {
+  const { rawMaterials, addRawMaterial } = useContext(RawMaterialContext);
+
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-4xl font-bold mb-6">
-        🌾 Raw Material Master
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-5">
+        Raw Material Management
       </h1>
 
-      <div className="bg-white p-6 rounded-xl shadow-lg">
-        <h2 className="text-2xl font-bold">
-          Raw Material Module
-        </h2>
+      <RawMaterialForm addMaterial={addRawMaterial} />
 
-        <p className="mt-3 text-gray-600">
-          Add, Edit, Delete and Manage Raw Material Stock.
-        </p>
-      </div>
+      <RawMaterialTable materials={rawMaterials} />
     </div>
   );
 }
-
-export default RawMaterials;

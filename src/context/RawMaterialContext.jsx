@@ -4,11 +4,10 @@ import rawMaterialsData from "../data/rawMaterials";
 export const RawMaterialContext = createContext();
 
 export function RawMaterialProvider({ children }) {
-
   const [rawMaterials, setRawMaterials] = useState(() => {
-    return rawMaterialsData;
+    const saved = localStorage.getItem("rawMaterials");
+    return saved ? JSON.parse(saved) : rawMaterialsData;
   });
-
 
   useEffect(() => {
     localStorage.setItem(
@@ -17,48 +16,57 @@ export function RawMaterialProvider({ children }) {
     );
   }, [rawMaterials]);
 
-
-  // New Raw Material Add
   const addRawMaterial = (item) => {
-    const newItem = {
-      id: Date.now(),
-      code: "RM" + String(rawMaterials.length + 1).padStart(3, "0"),
-      ...item,
-    };
-
     setRawMaterials((prev) => [
       ...prev,
-      newItem,
+      {
+        id: Date.now(),
+        code: "RM" + String(prev.length + 1).padStart(3, "0"),
+        ...item,
+      },
     ]);
   };
 
-
-  // Purchase झाल्यावर Stock वाढवणे
   const updateStock = (materialName, quantity) => {
+    setRawMaterials((prev) => {
+      const index = prev.findIndex(
+        (item) =>
+          item.name.trim().toLowerCase() ===
+          materialName.trim().toLowerCase()
+      );
 
-    setRawMaterials((prev) =>
-      prev.map((item) =>
-        item.name === materialName
-          ? {
-              ...item,
-              stock: Number(item.stock) + Number(quantity),
-            }
-          : item
-      )
-    );
+      if (index !== -1) {
+        return prev.map((item, i) =>
+          i === index
+            ? {
+                ...item,
+                stock:
+                  Number(item.stock) +
+                  Number(quantity),
+              }
+            : item
+        );
+      }
 
+      return [
+        ...prev,
+        {
+          id: Date.now(),
+          code:
+            "RM" +
+            String(prev.length + 1).padStart(3, "0"),
+          name: materialName,
+          stock: Number(quantity),
+        },
+      ];
+    });
   };
 
-
-  // Delete Raw Material
   const deleteRawMaterial = (code) => {
-
     setRawMaterials((prev) =>
       prev.filter((item) => item.code !== code)
     );
-
   };
-
 
   return (
     <RawMaterialContext.Provider

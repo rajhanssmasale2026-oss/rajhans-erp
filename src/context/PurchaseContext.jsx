@@ -4,8 +4,8 @@ export const PurchaseContext = createContext();
 
 export function PurchaseProvider({ children }) {
   const [purchases, setPurchases] = useState(() => {
-    const data = localStorage.getItem("purchases");
-    return data ? JSON.parse(data) : [];
+    const saved = localStorage.getItem("purchases");
+    return saved ? JSON.parse(saved) : [];
   });
 
   useEffect(() => {
@@ -13,11 +13,29 @@ export function PurchaseProvider({ children }) {
   }, [purchases]);
 
   const addPurchase = (purchase) => {
-    setPurchases((prev) => [...prev, purchase]);
+    setPurchases((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        ...purchase,
+      },
+    ]);
   };
 
-  const deletePurchase = (index) => {
-    setPurchases((prev) => prev.filter((_, i) => i !== index));
+  const deletePurchase = (id) => {
+    setPurchases((prev) =>
+      prev.filter((item) => item.id !== id)
+    );
+  };
+
+  const updatePurchase = (id, data) => {
+    setPurchases((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? { ...item, ...data }
+          : item
+      )
+    );
   };
 
   return (
@@ -26,6 +44,7 @@ export function PurchaseProvider({ children }) {
         purchases,
         addPurchase,
         deletePurchase,
+        updatePurchase,
       }}
     >
       {children}

@@ -1,111 +1,125 @@
-import { useContext, useState } from "react";
+import React, { useState, useContext } from "react";
+import { ProductContext } from "../context/ProductContext";
+function Sales() {const { products, updateStock } = useContext(ProductContext);
 
-import { SalesContext } from "../context/SalesContext";
-
-
-function Sales() {
-
-
-  const { sales, addSale, deleteSale } =
-    useContext(SalesContext);
-
+  
 
 
   const [sale, setSale] = useState({
-
-    date: "",
-
-    customer: "",
-
+    customerName: "",
+    mobile: "",
     product: "",
-
     quantity: "",
-
-    rate: "",
-
-    payment: "",
-
-    remark: "",
-
+    price: "",
   });
 
+
+  const [sales, setSales] = useState([]);
 
 
   const handleChange = (e) => {
 
     setSale({
-
       ...sale,
-
       [e.target.name]: e.target.value,
+    });
 
+  };
+
+
+  const handleProduct = (e) => {
+
+    const selected = products.find(
+      (item)=> item.name === e.target.value
+    );
+
+
+    setSale({
+      ...sale,
+      product:selected.name,
+      price:selected.salePrice,
     });
 
   };
 
 
 
-  const total =
-    Number(sale.quantity || 0) *
-    Number(sale.rate || 0);
+  const addSale = () => {
 
 
-
-
-  const handleSave = () => {
-
-
-    if (
-
-      !sale.date ||
-
-      !sale.customer ||
-
+    if(
+      !sale.customerName ||
       !sale.product ||
-
-      !sale.quantity ||
-
-      !sale.rate
-
-    ) {
-
-      alert("Please fill required fields");
-
+      !sale.quantity
+    ){
+      alert("Please fill all details");
       return;
-
     }
 
 
 
-    addSale({
+    const newSale = {
 
-      ...sale,
+      id: Date.now(),
 
-      total,
+      invoice:
+      "INV-" + Date.now(),
 
-    });
+      date:
+      new Date().toLocaleDateString(),
+
+      customer:
+      sale.customerName,
+
+      mobile:
+      sale.mobile,
+
+      product:
+      sale.product,
+
+      quantity:
+      Number(sale.quantity),
+
+      price:
+      Number(sale.price),
+
+      total:
+      Number(sale.quantity) *
+      Number(sale.price),
+
+    };
 
 
 
-    alert("Sale Saved Successfully");
+    setSales([
+      ...sales,
+      newSale
+    ]);
+    updateStock(
+  sale.product,
+  Number(sale.quantity)
+);
+    const productIndex = products.findIndex(
+  (item)=> item.name === sale.product
+);
+
+
+if(productIndex !== -1){
+
+  products[productIndex].stock =
+  products[productIndex].stock - Number(sale.quantity);
+
+}
 
 
 
     setSale({
 
-      date: "",
-
-      customer: "",
-
-      product: "",
-
-      quantity: "",
-
-      rate: "",
-
-      payment: "",
-
-      remark: "",
+      customerName:"",
+      mobile:"",
+      product:"",
+      quantity:"",
+      price:"",
 
     });
 
@@ -114,179 +128,238 @@ function Sales() {
 
 
 
+
   return (
 
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6">
 
 
       <h1 className="text-3xl font-bold mb-6">
-
-        🧾 Sales Management
-
+        Sales / विक्री
       </h1>
 
 
 
-      <div className="bg-white p-6 rounded-xl shadow-lg">
+      <div className="bg-white shadow-lg rounded-lg p-6">
+
+
+        <h2 className="text-xl font-semibold mb-4">
+          Create Sale Invoice
+        </h2>
 
 
 
-        <input
+        <div className="grid grid-cols-2 gap-4">
 
-          type="date"
 
-          name="date"
-
-          value={sale.date}
-
+          <input
+          name="customerName"
+          placeholder="Customer Name / ग्राहक नाव"
+          value={sale.customerName}
           onChange={handleChange}
-
-          className="border p-3 w-full mb-4 rounded"
-
-        />
+          className="border p-3 rounded"
+          />
 
 
 
-        <input
-
-          type="text"
-
-          name="customer"
-
-          placeholder="Customer Name"
-
-          value={sale.customer}
-
+          <input
+          name="mobile"
+          placeholder="Mobile Number"
+          value={sale.mobile}
           onChange={handleChange}
-
-          className="border p-3 w-full mb-4 rounded"
-
-        />
+          className="border p-3 rounded"
+          />
 
 
 
-        <input
-
-          type="text"
-
-          name="product"
-
-          placeholder="Product Name"
-
+          <select
           value={sale.product}
+          onChange={handleProduct}
+          className="border p-3 rounded"
+          >
 
-          onChange={handleChange}
-
-          className="border p-3 w-full mb-4 rounded"
-
-        />
+            <option value="">
+              Select Product
+            </option>
 
 
-        <input
+            {
+              products.map((item)=>(
+                <option key={item.code}>
+                  {item.name}
+                </option>
+              ))
+            }
 
+
+          </select>
+
+
+
+          <input
           type="number"
-
           name="quantity"
-
           placeholder="Quantity"
-
           value={sale.quantity}
-
           onChange={handleChange}
-
-          className="border p-3 w-full mb-4 rounded"
-
-        />
+          className="border p-3 rounded"
+          />
 
 
-        <input
 
+          <input
           type="number"
-
-          name="rate"
-
-          placeholder="Sale Rate"
-
-          value={sale.rate}
-
-          onChange={handleChange}
-
-          className="border p-3 w-full mb-4 rounded"
-
-        />
-
-
-
-        <input
-
-          value={total}
-
+          value={sale.price}
           readOnly
-
-          className="border p-3 w-full mb-4 rounded bg-gray-100"
-
-        />
-
-
-
-        <select
-
-          name="payment"
-
-          value={sale.payment}
-
-          onChange={handleChange}
-
-          className="border p-3 w-full mb-4 rounded"
-
-        >
-
-          <option value="">
-
-            Payment Type
-
-          </option>
-
-          <option value="Cash">
-
-            Cash
-
-          </option>
-
-          <option value="Credit">
-
-            Credit
-
-          </option>
-
-        </select>
+          placeholder="Rate"
+          className="border p-3 rounded bg-gray-100"
+          />
 
 
 
-        <textarea
+        </div>
 
-          name="remark"
-
-          placeholder="Remark"
-
-          value={sale.remark}
-
-          onChange={handleChange}
-
-          className="border p-3 w-full mb-4 rounded"
-
-        />
 
 
 
         <button
 
-          onClick={handleSave}
+        onClick={addSale}
 
-          className="bg-green-600 text-white px-6 py-3 rounded"
+        className="mt-5 bg-green-600 text-white px-6 py-3 rounded"
 
         >
 
-          Save Sale
+          Add Sale
 
         </button>
+
+
+
+      </div>
+
+
+
+
+
+      {/* Sales History */}
+
+
+
+      <div className="bg-white shadow-lg rounded-lg p-6 mt-8">
+
+
+        <h2 className="text-xl font-semibold mb-4">
+          Sales History / विक्री नोंद
+        </h2>
+
+
+
+        <table className="w-full border">
+
+
+          <thead>
+
+            <tr className="bg-gray-200">
+
+              <th className="border p-2">
+                Invoice
+              </th>
+
+
+              <th className="border p-2">
+                Date
+              </th>
+
+
+              <th className="border p-2">
+                Customer
+              </th>
+
+
+              <th className="border p-2">
+                Product
+              </th>
+
+
+              <th className="border p-2">
+                Qty
+              </th>
+
+
+              <th className="border p-2">
+                Total
+              </th>
+
+
+            </tr>
+
+          </thead>
+
+
+
+          <tbody>
+
+
+          {
+            sales.map((item)=>(
+
+              <tr key={item.id}>
+
+
+                <td className="border p-2">
+                  {item.invoice}
+                </td>
+
+
+                <td className="border p-2">
+                  {item.date}
+                </td>
+
+
+                <td className="border p-2">
+                  {item.customer}
+                </td>
+
+
+                <td className="border p-2">
+                  {item.product}
+                </td>
+
+
+                <td className="border p-2">
+                  {item.quantity}
+                </td>
+
+
+                <td className="border p-2">
+                  ₹ {item.total}
+                </td>
+
+
+              </tr>
+
+
+            ))
+          }
+
+
+
+          </tbody>
+
+
+        </table>
+
+
+      </div>
+
+
+
+    </div>
+
+  );
+
+}
+
+
+export default Sales;

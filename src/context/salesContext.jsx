@@ -8,8 +8,7 @@ export function SalesProvider({ children }) {
 
   const [sales, setSales] = useState(() => {
 
-    const saved =
-      localStorage.getItem("sales");
+    const saved = localStorage.getItem("sales");
 
     return saved
       ? JSON.parse(saved)
@@ -30,8 +29,7 @@ export function SalesProvider({ children }) {
 
 
 
-
-  const addSale = (sale) => {
+  const addSale = (bill) => {
 
     setSales((prev) => [
 
@@ -39,13 +37,12 @@ export function SalesProvider({ children }) {
 
       {
         id: Date.now(),
-        ...sale,
+        ...bill,
       }
 
     ]);
 
   };
-
 
 
 
@@ -58,7 +55,6 @@ export function SalesProvider({ children }) {
     );
 
   };
-
 
 
 

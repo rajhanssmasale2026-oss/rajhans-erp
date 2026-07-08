@@ -1,16 +1,10 @@
-const express = require("express");
-const router = express.Router();
+function Sales() {
+  return (
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-4">Sales</h1>
+      <p>Sales Module Coming Soon...</p>
+    </div>
+  );
+}
 
-let sales = [];
-
-router.post("/add", (req, res) => {
-    const sale = req.body;
-    sales.push(sale);
-    res.json({ message: "Sale added", data: sale });
-});
-
-router.get("/all", (req, res) => {
-    res.json(sales);
-});
-
-module.exports = router;
+export default Sales;

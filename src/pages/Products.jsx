@@ -2,7 +2,20 @@ import React, { useContext } from "react";
 import { ProductContext } from "../context/ProductContext";
 
 function Products() {
-  const { products } = useContext(ProductContext);
+  const { products, addStock } = useContext(ProductContext);
+
+  const handleAddStock = (productName) => {
+    const qty = prompt("Enter Stock Quantity");
+
+    if (!qty) return;
+
+    if (isNaN(qty) || Number(qty) <= 0) {
+      alert("Please enter valid quantity");
+      return;
+    }
+
+    addStock(productName, Number(qty));
+  };
 
   return (
     <div className="p-6">
@@ -20,17 +33,24 @@ function Products() {
               <th className="border p-3">Purchase</th>
               <th className="border p-3">Sale</th>
               <th className="border p-3">Stock</th>
+              <th className="border p-3">Action</th>
             </tr>
           </thead>
 
           <tbody>
             {products.map((item) => (
               <tr key={item.code}>
-                <td className="border p-3">{item.code}</td>
+                <td className="border p-3">
+                  {item.code}
+                </td>
 
-                <td className="border p-3">{item.name}</td>
+                <td className="border p-3">
+                  {item.name}
+                </td>
 
-                <td className="border p-3">{item.weight}</td>
+                <td className="border p-3">
+                  {item.weight}
+                </td>
 
                 <td className="border p-3">
                   ₹ {item.purchasePrice}
@@ -42,6 +62,17 @@ function Products() {
 
                 <td className="border p-3 font-bold text-blue-600">
                   {item.stock}
+                </td>
+
+                <td className="border p-3">
+                  <button
+                    onClick={() =>
+                      handleAddStock(item.name)
+                    }
+                    className="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700"
+                  >
+                    + Add Stock
+                  </button>
                 </td>
               </tr>
             ))}

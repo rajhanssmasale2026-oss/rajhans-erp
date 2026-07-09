@@ -31,11 +31,25 @@ export function ProductProvider({ children }) {
     );
   };
 
+  const addStock = (productName, qty) => {
+    setProducts((prevProducts) =>
+      prevProducts.map((item) =>
+        item.name === productName
+          ? {
+              ...item,
+              stock: Number(item.stock) + Number(qty),
+            }
+          : item
+      )
+    );
+  };
+
   return (
     <ProductContext.Provider
       value={{
         products,
         updateStock,
+        addStock,
       }}
     >
       {children}

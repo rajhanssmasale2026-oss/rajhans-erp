@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { ProductContext } from "../context/ProductContext";
+import { SalesContext } from "../context/SalesContext";
 function Sales() {const { products, updateStock } = useContext(ProductContext);
 
   

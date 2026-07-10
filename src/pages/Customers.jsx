@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import CustomerForm from "../components/Customers/CustomerForm";
 import CustomerSearch from "../components/Customers/CustomerSearch";
 import CustomerTable from "../components/Customers/CustomerTable";
+import CustomerPayment from "../components/Customers/CustomerPayment";
+import CustomerLedger from "../components/Customers/CustomerLedger";
 
 function Customers() {
   const [search, setSearch] = useState("");
@@ -24,6 +26,10 @@ function Customers() {
       <CustomerTable
         search={search}
       />
+
+      <CustomerPayment />
+
+      <CustomerLedger />
 
     </div>
   );

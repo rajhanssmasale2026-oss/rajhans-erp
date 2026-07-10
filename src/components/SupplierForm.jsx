@@ -17,26 +17,47 @@ export default function SupplierForm({ addSupplier }) {
     });
   };
 
-  const handleSubmit = () => {
-    if (!form.name || !form.mobile) {
-      alert("Supplier Name आणि Mobile भरा");
-      return;
-    }
+  const handleAddSale = () => {
+  if (
+    !sale.customerName ||
+    items.length === 0
+  ) {
+    alert("Please add customer and products");
+    return;
+  }
 
-    addSupplier({
-      ...form,
-      openingBalance: Number(form.openingBalance),
-    });
-
-    setForm({
-      name: "",
-      mobile: "",
-      gst: "",
-      address: "",
-      material: "",
-      openingBalance: "",
-    });
+  const newSale = {
+    id: Date.now(),
+    invoice: "INV-" + Date.now(),
+    date: new Date().toLocaleDateString(),
+    customer: sale.customerName,
+    mobile: sale.mobile,
+    products: items,
+    totalAmount: items.reduce(
+      (sum, item) => sum + item.total,
+      0
+    ),
   };
+
+  addSale(newSale);
+
+  items.forEach((item) => {
+    updateStock(
+      item.product,
+      item.quantity
+    );
+  });
+
+  setSale({
+    customerName: "",
+    mobile: "",
+    product: "",
+    quantity: "",
+    price: "",
+  });
+
+  setItems([]);
+};
 
   return (
     <div className="bg-white shadow rounded-lg p-4">

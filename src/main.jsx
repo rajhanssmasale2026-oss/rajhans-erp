@@ -9,6 +9,7 @@ import { ProductProvider } from "./context/ProductContext.jsx";
 import { RawMaterialProvider } from "./context/RawMaterialContext.jsx";
 import { PurchaseProvider } from "./context/PurchaseContext.jsx";
 import { SalesProvider } from "./context/SalesContext.jsx";
+import { CustomerProvider } from "./context/CustomerContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -17,7 +18,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <RawMaterialProvider>
           <PurchaseProvider>
             <SalesProvider>
-              <App />
+              <CustomerProvider>
+                <App />
+              </CustomerProvider>
             </SalesProvider>
           </PurchaseProvider>
         </RawMaterialProvider>

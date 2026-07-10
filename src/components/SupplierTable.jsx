@@ -1,129 +1,82 @@
-function SupplierTable({
-  suppliers,
-  deleteSupplier,
-}) {
+import React, { useContext } from "react";
+import { SalesContext } from "../context/SalesContext";
 
+function SalesTable() {
+  const { sales } = useContext(SalesContext);
 
   return (
-
-    <div className="bg-white mt-6 p-6 rounded-xl shadow">
-
-
-      <h2 className="text-2xl font-bold mb-4">
-        Supplier List
+    <div className="bg-white shadow-lg rounded-lg p-6">
+      <h2 className="text-xl font-semibold mb-4">
+        Sales History / विक्री नोंद
       </h2>
 
-
-
-      <table className="w-full border">
-
-
+      <table className="w-full border border-collapse">
         <thead>
-
-          <tr className="border">
-
-
-            <th className="border p-2">
-              Name
-            </th>
-
-
-            <th className="border p-2">
-              Mobile
-            </th>
-
-
-            <th className="border p-2">
-              GST
-            </th>
-
-
-            <th className="border p-2">
-              Address
-            </th>
-
-
-            <th className="border p-2">
-              Action
-            </th>
-
-
+          <tr className="bg-gray-200">
+            <th className="border p-2">Invoice</th>
+            <th className="border p-2">Date</th>
+            <th className="border p-2">Customer</th>
+            <th className="border p-2">Mobile</th>
+            <th className="border p-2">Products</th>
+            <th className="border p-2">Total Qty</th>
+            <th className="border p-2">Grand Total</th>
           </tr>
-
         </thead>
 
-
-
         <tbody>
-
-
-          {suppliers.map((item) => (
-
-
-            <tr
-              key={item.id}
-              className="border"
-            >
-
-
-              <td className="border p-2">
-                {item.name}
+          {sales.length === 0 ? (
+            <tr>
+              <td
+                colSpan="7"
+                className="border p-4 text-center"
+              >
+                No Sales Found
               </td>
-
-
-              <td className="border p-2">
-                {item.mobile}
-              </td>
-
-
-              <td className="border p-2">
-                {item.gst || "-"}
-              </td>
-
-
-              <td className="border p-2">
-                {item.address}
-              </td>
-
-
-              <td className="border p-2">
-
-
-                <button
-
-                  onClick={() =>
-                    deleteSupplier(item.id)
-                  }
-
-                  className="bg-red-600 text-white px-3 py-1 rounded"
-
-                >
-
-                  Delete
-
-                </button>
-
-
-              </td>
-
-
             </tr>
+          ) : (
+            sales.map((sale) => (
+              <tr key={sale.id}>
+                <td className="border p-2">
+                  {sale.invoice}
+                </td>
 
+                <td className="border p-2">
+                  {sale.date}
+                </td>
 
-          ))}
+                <td className="border p-2">
+                  {sale.customer}
+                </td>
 
+                <td className="border p-2">
+                  {sale.mobile}
+                </td>
 
+                <td className="border p-2">
+                  {sale.products?.map((item) => (
+                    <div key={item.product}>
+                      {item.product} ({item.quantity} × ₹{item.price})
+                    </div>
+                  ))}
+                </td>
+
+                <td className="border p-2 text-center">
+                  {sale.products?.reduce(
+                    (sum, item) => sum + item.quantity,
+                    0
+                  )}
+                </td>
+
+                <td className="border p-2 text-right font-semibold">
+                  ₹ {sale.totalAmount}
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
-
-
       </table>
-
-
     </div>
-
   );
-
 }
 
-
-export default SupplierTable;
+export default SalesTable;

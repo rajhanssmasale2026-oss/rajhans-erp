@@ -2,6 +2,12 @@ import React, { useContext, useState } from "react";
 import { ProductContext } from "../context/ProductContext";
 import { SalesContext } from "../context/SalesContext";
 
+import CustomerDetails from "./Sales/CustomerDetails";
+import ProductSelector from "./Sales/ProductSelector";
+import InvoiceItemsTable from "./Sales/InvoiceItemsTable";
+import InvoiceSummary from "./Sales/InvoiceSummary";
+import AddSaleButton from "./Sales/AddSaleButton";
+
 function SalesForm() {
   const { products, updateStock } = useContext(ProductContext);
   const { addSale } = useContext(SalesContext);
@@ -13,6 +19,8 @@ function SalesForm() {
     quantity: "",
     price: "",
   });
+
+  const [items, setItems] = useState([]);
 
   const handleChange = (e) => {
     setSale({
@@ -28,23 +36,17 @@ function SalesForm() {
     });
   };
 
-  const handleAddSale = () => {
+  const handleAddItem = () => {
     if (
-      !sale.customerName ||
       !sale.product ||
       !sale.quantity ||
       !sale.price
     ) {
-      alert("Please fill all details");
+      alert("Fill Product, Quantity and Price");
       return;
     }
 
-    const newSale = {
-      id: Date.now(),
-      invoice: "INV-" + Date.now(),
-      date: new Date().toLocaleDateString(),
-      customer: sale.customerName,
-      mobile: sale.mobile,
+    const newItem = {
       product: sale.product,
       quantity: Number(sale.quantity),
       price: Number(sale.price),
@@ -53,12 +55,45 @@ function SalesForm() {
         Number(sale.price),
     };
 
-    addSale(newSale);
+    setItems((prev) => [...prev, newItem]);
 
-    updateStock(
-      sale.product,
-      Number(sale.quantity)
+    setSale((prev) => ({
+      ...prev,
+      product: "",
+      quantity: "",
+      price: "",
+    }));
+  };
+
+  const handleAddSale = () => {
+    if (!sale.customerName) {
+      alert("Enter Customer Name");
+      return;
+    }
+
+    if (items.length === 0) {
+      alert("Add at least one item");
+      return;
+    }
+        const grandTotal = items.reduce(
+      (sum, item) => sum + item.total,
+      0
     );
+
+    addSale({
+      invoice: "INV-" + Date.now(),
+      date: new Date().toLocaleDateString(),
+      customer: sale.customerName,
+      mobile: sale.mobile,
+      products: items,
+      totalAmount: grandTotal,
+    });
+
+    items.forEach((item) => {
+      updateStock(item.product, item.quantity);
+    });
+
+    setItems([]);
 
     setSale({
       customerName: "",
@@ -71,71 +106,37 @@ function SalesForm() {
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6">
-      <h2 className="text-xl font-semibold mb-4">
+
+      <h2 className="text-2xl font-bold mb-5">
         Create Sale Invoice
       </h2>
 
-      <div className="grid grid-cols-2 gap-4">
-        <input
-          name="customerName"
-          placeholder="Customer Name"
-          value={sale.customerName}
-          onChange={handleChange}
-          className="border p-3 rounded"
-        />
+      <CustomerDetails
+        sale={sale}
+        handleChange={handleChange}
+      />
 
-        <input
-          name="mobile"
-          placeholder="Mobile Number"
-          value={sale.mobile}
-          onChange={handleChange}
-          className="border p-3 rounded"
-        />
+      <ProductSelector
+        sale={sale}
+        products={products}
+        handleChange={handleChange}
+        handleProduct={handleProduct}
+        handleAddItem={handleAddItem}
+      />
 
-        <select
-          value={sale.product}
-          onChange={handleProduct}
-          className="border p-3 rounded"
-        >
-          <option value="">
-            Select Product
-          </option>
+      <InvoiceItemsTable
+        items={items}
+        setItems={setItems}
+      />
 
-          {products.map((item) => (
-            <option
-              key={item.code}
-              value={item.name}
-            >
-              {item.name}
-            </option>
-          ))}
-        </select>
+      <InvoiceSummary
+        items={items}
+      />
 
-        <input
-          type="number"
-          name="quantity"
-          placeholder="Quantity"
-          value={sale.quantity}
-          onChange={handleChange}
-          className="border p-3 rounded"
-        />
+      <AddSaleButton
+        handleAddSale={handleAddSale}
+      />
 
-        <input
-          type="number"
-          name="price"
-          placeholder="Enter Sale Price"
-          value={sale.price}
-          onChange={handleChange}
-          className="border p-3 rounded"
-        />
-      </div>
-
-      <button
-        onClick={handleAddSale}
-        className="mt-5 bg-green-600 text-white px-6 py-3 rounded"
-      >
-        Add Sale
-      </button>
     </div>
   );
 }

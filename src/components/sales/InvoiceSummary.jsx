@@ -4,29 +4,36 @@ function InvoiceSummary({ items }) {
   if (items.length === 0) return null;
 
   const totalQty = items.reduce(
-    (sum, item) => sum + item.quantity,
+    (sum, item) => sum + Number(item.quantity),
     0
   );
 
   const grandTotal = items.reduce(
-    (sum, item) => sum + item.total,
+    (sum, item) => sum + Number(item.total),
     0
   );
 
   return (
-    <div className="mt-5 border rounded-lg p-4 bg-gray-50">
+    <div className="mt-6 bg-gray-100 rounded-lg p-4">
 
       <div className="flex justify-between mb-2">
-        <span className="font-semibold">
-          Total Quantity
-        </span>
+        <h3 className="text-lg font-bold">
+          Invoice Summary
+        </h3>
+      </div>
 
+      <div className="flex justify-between">
+        <span>Total Items :</span>
+        <span>{items.length}</span>
+      </div>
+
+      <div className="flex justify-between">
+        <span>Total Quantity :</span>
         <span>{totalQty}</span>
       </div>
 
-      <div className="flex justify-between text-lg font-bold">
-        <span>Grand Total</span>
-
+      <div className="flex justify-between text-xl font-bold mt-3 border-t pt-3">
+        <span>Grand Total :</span>
         <span>₹ {grandTotal}</span>
       </div>
 

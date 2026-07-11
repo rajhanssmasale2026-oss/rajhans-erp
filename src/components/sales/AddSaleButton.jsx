@@ -1,13 +1,17 @@
 import React from "react";
 
-function AddSaleButton({ handleAddSale }) {
+function AddSaleButton({
+  handleAddSale,
+}) {
   return (
-    <button
-      onClick={handleAddSale}
-      className="mt-5 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold"
-    >
-      Add Sale
-    </button>
+    <div className="mt-6 flex justify-end">
+      <button
+        onClick={handleAddSale}
+        className="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-lg"
+      >
+        Save Sale
+      </button>
+    </div>
   );
 }
 

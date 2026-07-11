@@ -16,71 +16,103 @@ export function CustomerProvider({ children }) {
   }, [customers]);
 
   const addCustomer = (customer) => {
-    setCustomers((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        code:
-          "CUS" +
-          String(prev.length + 1).padStart(3, "0"),
+    setCustomers((prev) => {
+      const exists = prev.find(
+        (c) =>
+          c.name.trim().toLowerCase() ===
+          customer.name.trim().toLowerCase()
+      );
 
-        name: customer.name,
-        address: customer.address,
-        mobile: customer.mobile,
+      if (exists) return prev;
 
-        totalPurchase: 0,
-        totalReceived: 0,
-        balance: 0,
-        creditSince: "",
-      },
-    ]);
+      return [
+        ...prev,
+        {
+          id: Date.now(),
+          code:
+            "CUS" +
+            String(prev.length + 1).padStart(3, "0"),
+
+          name: customer.name,
+          address: customer.address || "",
+          mobile: customer.mobile || "",
+
+          totalPurchase: 0,
+          totalReceived: 0,
+          balance: 0,
+          creditSince: "",
+        },
+      ];
+    });
   };
 
-  const updateCustomer = (id, data) => {
-    setCustomers((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? { ...item, ...data }
-          : item
-      )
-    );
-  };
-
-  const deleteCustomer = (id) => {
-    setCustomers((prev) =>
-      prev.filter((item) => item.id !== id)
+  const getCustomer = (name) => {
+    return customers.find(
+      (c) =>
+        c.name.trim().toLowerCase() ===
+        name.trim().toLowerCase()
     );
   };
 
   const addSaleToCustomer = (
     customerName,
+    mobile,
     amount
   ) => {
-    setCustomers((prev) =>
-      prev.map((customer) => {
-        if (customer.name !== customerName)
+    setCustomers((prev) => {
+      let found = false;
+
+      const updated = prev.map((customer) => {
+        if (
+          customer.name.trim().toLowerCase() !==
+          customerName.trim().toLowerCase()
+        ) {
           return customer;
+        }
+
+        found = true;
 
         const purchase =
           Number(customer.totalPurchase) +
           Number(amount);
 
-        const received =
-          Number(customer.totalReceived);
-
-        const balance =
-          purchase - received;
-
         return {
           ...customer,
+          mobile:
+            customer.mobile || mobile,
           totalPurchase: purchase,
-          balance: balance,
+          balance:
+            purchase -
+            Number(customer.totalReceived),
           creditSince:
             customer.creditSince ||
             new Date().toLocaleDateString(),
         };
-      })
-    );
+      });
+
+      if (found) return updated;
+
+      return [
+        ...updated,
+        {
+          id: Date.now(),
+          code:
+            "CUS" +
+            String(updated.length + 1).padStart(
+              3,
+              "0"
+            ),
+          name: customerName,
+          address: "",
+          mobile: mobile,
+          totalPurchase: Number(amount),
+          totalReceived: 0,
+          balance: Number(amount),
+          creditSince:
+            new Date().toLocaleDateString(),
+        },
+      ];
+    });
   };
 
   const receivePayment = (
@@ -89,21 +121,22 @@ export function CustomerProvider({ children }) {
   ) => {
     setCustomers((prev) =>
       prev.map((customer) => {
-        if (customer.name !== customerName)
+        if (
+          customer.name.trim().toLowerCase() !==
+          customerName.trim().toLowerCase()
+        )
           return customer;
 
         const received =
           Number(customer.totalReceived) +
           Number(amount);
 
-        const purchase =
-          Number(customer.totalPurchase);
-
         return {
           ...customer,
           totalReceived: received,
           balance:
-            purchase - received,
+            Number(customer.totalPurchase) -
+            received,
         };
       })
     );
@@ -114,8 +147,7 @@ export function CustomerProvider({ children }) {
       value={{
         customers,
         addCustomer,
-        updateCustomer,
-        deleteCustomer,
+        getCustomer,
         addSaleToCustomer,
         receivePayment,
       }}

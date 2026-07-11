@@ -11,6 +11,9 @@ import { PurchaseProvider } from "./context/PurchaseContext.jsx";
 import { SalesProvider } from "./context/SalesContext.jsx";
 import { CustomerProvider } from "./context/CustomerContext.jsx";
 import { ExpenseProvider } from "./context/ExpenseContext.jsx";
+import {
+  OtherSellProvider,
+} from "./context/OtherSellContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -21,7 +24,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <SalesProvider>
               <CustomerProvider>
                 <ExpenseProvider>
-                  <App />
+                  <OtherSellProvider>
+                    <App />
+                  </OtherSellProvider>
                 </ExpenseProvider>
               </CustomerProvider>
             </SalesProvider>

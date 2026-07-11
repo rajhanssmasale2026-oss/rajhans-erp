@@ -7,6 +7,8 @@ import RawMaterials from "./pages/RawMaterials";
 import Suppliers from "./pages/Suppliers";
 import Sales from "./pages/Sales";
 import Customers from "./pages/Customers";
+import Expenses from "./pages/Expenses";
+import OtherSell from "./pages/OtherSell";
 
 function App() {
   return (
@@ -27,6 +29,10 @@ function App() {
       <Route path="/sales" element={<Sales />} />
 
       <Route path="/customers" element={<Customers />} />
+
+      <Route path="/expenses" element={<Expenses />} />
+
+      <Route path="/other-sell" element={<OtherSell />} />
 
     </Routes>
   );

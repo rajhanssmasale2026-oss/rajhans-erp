@@ -1,37 +1,42 @@
 import React, { useContext, useState } from "react";
-import { SalesContext } from "../context/SalesContext";
+import { SalesContext } from "../context/SalesContext.jsx";
 
 import SalesRow from "./SalesRow";
 import PaymentModal from "./PaymentModal";
 
 function SalesTable() {
 
-  const {
-    sales,
-    receivePayment,
-  } = useContext(SalesContext);
+  const context = useContext(SalesContext);
+
+console.log("Sales Context:", context);
+
+const {
+  sales,
+  receivePayment,
+} = context;
+  console.log(useContext(SalesContext));
 
   const [selectedSale, setSelectedSale] =
     useState(null);
 
   const handleSavePayment = (
+  amount,
+  mode,
+  paymentDate
+) => {
+
+  receivePayment(
+    selectedSale.id,
     amount,
-    mode
-  ) => {
+    mode,
+    paymentDate
+  );
 
-    receivePayment(
-      selectedSale.id,
-      amount
-    );
+  alert("Payment Saved Successfully");
 
-    alert(
-      "Payment Received Successfully\nMode : " +
-        mode
-    );
+  setSelectedSale(null);
 
-    setSelectedSale(null);
-
-  };
+};
 
   return (
 

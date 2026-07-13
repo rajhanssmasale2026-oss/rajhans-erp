@@ -6,13 +6,15 @@ export function SalesProvider({ children }) {
 
   const [sales, setSales] = useState(() => {
 
-    const saved = localStorage.getItem("sales");
+    const saved =
+      localStorage.getItem("sales");
 
     return saved
       ? JSON.parse(saved)
       : [];
 
   });
+
 
   useEffect(() => {
 
@@ -27,9 +29,9 @@ export function SalesProvider({ children }) {
 
   const addSale = (bill) => {
 
-    const total = Number(
-      bill.totalAmount || 0
-    );
+    const total =
+      Number(bill.totalAmount || 0);
+
 
     setSales((prev) => [
 
@@ -47,6 +49,10 @@ export function SalesProvider({ children }) {
 
         paymentStatus: "Pending",
 
+        paymentMode: "",
+
+        paymentDate: "",
+
       },
 
     ]);
@@ -57,43 +63,67 @@ export function SalesProvider({ children }) {
 
   const receivePayment = (
     id,
-    paymentAmount
+    paymentAmount,
+    paymentMode,
+    paymentDate
   ) => {
+
 
     setSales((prev) =>
 
       prev.map((sale) => {
 
-        if (sale.id !== id)
+
+        if (sale.id !== id) {
+
           return sale;
 
+        }
+
+
         const paid =
-          Number(sale.paidAmount) +
           Number(paymentAmount);
 
-        const total =
-          Number(sale.totalAmount);
+
+        const oldPaid =
+          Number(sale.paidAmount || 0);
+
+
+        const totalPaid =
+          oldPaid + paid;
+
 
         const balance =
-          total - paid;
+          Number(sale.totalAmount) - totalPaid;
+
+
 
         return {
 
           ...sale,
 
-          paidAmount: paid,
+          paidAmount:
+            totalPaid,
+
 
           balanceAmount:
-            balance < 0
-              ? 0
-              : balance,
+            balance > 0
+              ? balance
+              : 0,
+
 
           paymentStatus:
             balance <= 0
               ? "Paid"
               : "Pending",
 
+
+          paymentMode,
+
+          paymentDate,
+
         };
+
 
       })
 
@@ -108,7 +138,8 @@ export function SalesProvider({ children }) {
     setSales((prev) =>
 
       prev.filter(
-        (item) => item.id !== id
+        (sale) =>
+          sale.id !== id
       )
 
     );

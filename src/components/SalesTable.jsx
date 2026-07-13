@@ -1,12 +1,37 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { SalesContext } from "../context/SalesContext";
-import { generateInvoicePDF } from "../utils/generateInvoicePDF";
+
+import SalesRow from "./SalesRow";
+import PaymentModal from "./PaymentModal";
 
 function SalesTable() {
 
-  const { sales } =
-    useContext(SalesContext);
+  const {
+    sales,
+    receivePayment,
+  } = useContext(SalesContext);
 
+  const [selectedSale, setSelectedSale] =
+    useState(null);
+
+  const handleSavePayment = (
+    amount,
+    mode
+  ) => {
+
+    receivePayment(
+      selectedSale.id,
+      amount
+    );
+
+    alert(
+      "Payment Received Successfully\nMode : " +
+        mode
+    );
+
+    setSelectedSale(null);
+
+  };
 
   return (
 
@@ -16,120 +41,117 @@ function SalesTable() {
         Sales History / विक्री नोंद
       </h2>
 
+      <div className="overflow-x-auto">
 
-      <table className="w-full border border-collapse">
+        <table className="w-full border border-collapse">
 
-        <thead>
+          <thead>
 
-          <tr className="bg-gray-200">
+            <tr className="bg-gray-200">
 
-            <th className="border p-2">
-              Invoice
-            </th>
+              <th className="border p-2">
+                Invoice
+              </th>
 
-            <th className="border p-2">
-              Date
-            </th>
+              <th className="border p-2">
+                Date
+              </th>
 
-            <th className="border p-2">
-              Customer
-            </th>
+              <th className="border p-2">
+                Customer
+              </th>
 
-            <th className="border p-2">
-              Mobile
-            </th>
+              <th className="border p-2">
+                Mobile
+              </th>
 
-            <th className="border p-2">
-              Total
-            </th>
+              <th className="border p-2">
+                Total
+              </th>
 
-            <th className="border p-2">
-              PDF
-            </th>
+              <th className="border p-2">
+                Paid
+              </th>
 
-          </tr>
+              <th className="border p-2">
+                Balance
+              </th>
 
-        </thead>
+              <th className="border p-2">
+                Status
+              </th>
 
+              <th className="border p-2">
+                Payment
+              </th>
 
-        <tbody>
-
-          {sales.length === 0 ? (
-
-            <tr>
-
-              <td
-                colSpan="6"
-                className="border p-4 text-center"
-              >
-                No Sales Found
-              </td>
+              <th className="border p-2">
+                PDF
+              </th>
 
             </tr>
 
-          ) : (
+          </thead>
 
-            sales.map((item)=>(
+          <tbody>
 
-              <tr key={item.id}>
+            {sales.length === 0 ? (
 
-                <td className="border p-2">
-                  {item.invoice}
-                </td>
+              <tr>
 
+                <td
+                  colSpan="10"
+                  className="border p-4 text-center"
+                >
 
-                <td className="border p-2">
-                  {item.date}
-                </td>
-
-
-                <td className="border p-2">
-                  {item.customer}
-                </td>
-
-
-                <td className="border p-2">
-                  {item.mobile}
-                </td>
-
-
-                <td className="border p-2 text-right">
-                  ₹ {item.totalAmount}
-                </td>
-
-
-                <td className="border p-2 text-center">
-
-                  <button
-
-                    onClick={() =>
-                      generateInvoicePDF(item)
-                    }
-
-                    className="bg-blue-600 text-white px-3 py-1 rounded"
-
-                  >
-                    Download PDF
-                  </button>
+                  No Sales Found
 
                 </td>
-
 
               </tr>
 
-            ))
+            ) : (
 
-          )}
+              sales.map((sale) => (
 
-        </tbody>
+                <SalesRow
+                  key={sale.id}
+                  sale={sale}
+                  onReceivePayment={
+                    setSelectedSale
+                  }
+                />
 
-      </table>
+              ))
+
+            )}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+      {selectedSale && (
+
+        <PaymentModal
+
+          sale={selectedSale}
+
+          onClose={() =>
+            setSelectedSale(null)
+          }
+
+          onSave={handleSavePayment}
+
+        />
+
+      )}
 
     </div>
 
   );
 
 }
-
 
 export default SalesTable;

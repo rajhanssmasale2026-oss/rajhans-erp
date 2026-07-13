@@ -32,12 +32,17 @@ export function ExpenseProvider({ children }) {
     );
   };
 
-  return (
+  const totalExpenses = expenses.reduce(
+  (sum, item) => sum + Number(item.amount || 0),
+  0
+);
+return (
     <ExpenseContext.Provider
       value={{
         expenses,
         addExpense,
         deleteExpense,
+        totalExpenses,
       }}
     >
       {children}

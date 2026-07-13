@@ -5,17 +5,24 @@ function Sidebar() {
 
   const navigate = useNavigate();
 
-  const [openOthers, setOpenOthers] = useState(false);
+  const [openOthers, setOpenOthers] =
+    useState(false);
 
 
   const menuItems = [
+
     { icon: "🏠", name: "Dashboard", path: "/dashboard" },
+
     { icon: "📦", name: "Products", path: "/products" },
+
     { icon: "🧾", name: "Sales", path: "/sales" },
+
     { icon: "🛒", name: "Purchase", path: "/purchase" },
-    { icon: "👥", name: "Customers", path: "/customers" },
+
     { icon: "📊", name: "Reports", path: "/reports" },
+
     { icon: "⚙️", name: "Settings", path: "/settings" },
+
   ];
 
 
@@ -61,14 +68,18 @@ function Sidebar() {
 
 
 
-        {/* Others Menu */}
+        {/* Others */}
 
         <li>
 
-
           <div
-            onClick={() => setOpenOthers(!openOthers)}
+
+            onClick={() =>
+              setOpenOthers(!openOthers)
+            }
+
             className="p-3 rounded-lg cursor-pointer hover:bg-blue-600"
+
           >
 
             <span className="mr-3">
@@ -77,9 +88,13 @@ function Sidebar() {
 
             Others
 
+
             <span className="float-right">
+
               {openOthers ? "▲" : "▼"}
+
             </span>
+
 
           </div>
 
@@ -91,18 +106,33 @@ function Sidebar() {
 
 
               <li
-                onClick={() => navigate("/expenses")}
+
+                onClick={() =>
+                  navigate("/expenses")
+                }
+
                 className="p-2 rounded cursor-pointer hover:bg-green-600"
+
               >
+
                 💸 Expenses
+
               </li>
 
 
+
               <li
-                onClick={() => navigate("/other-sell")}
+
+                onClick={() =>
+                  navigate("/other-sell")
+                }
+
                 className="p-2 rounded cursor-pointer hover:bg-green-600"
+
               >
+
                 💰 Sell
+
               </li>
 
 
@@ -117,6 +147,7 @@ function Sidebar() {
       </ul>
 
 
+
       <div className="p-4 border-t border-gray-700 text-center text-sm text-gray-400">
 
         Developed for Rajhans Masale ❤️
@@ -129,5 +160,6 @@ function Sidebar() {
   );
 
 }
+
 
 export default Sidebar;

@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 
 import { ProductContext } from "../context/ProductContext";
 import { SalesContext } from "../context/SalesContext";
-import { CustomerContext } from "../context/CustomerContext";
+
 
 import CustomerDetails from "./Sales/CustomerDetails";
 import ProductSelector from "./Sales/ProductSelector";
@@ -18,8 +18,7 @@ function SalesForm() {
   const { addSale } =
     useContext(SalesContext);
 
-  const { addSaleToCustomer } =
-    useContext(CustomerContext);
+  
 
 
   const [sale, setSale] = useState({
@@ -154,11 +153,7 @@ function SalesForm() {
 
 
 
-    addSaleToCustomer(
-      sale.customerName,
-      sale.mobile,
-      grandTotal
-    );
+   
 
 
 

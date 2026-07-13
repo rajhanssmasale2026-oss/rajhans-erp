@@ -1,88 +1,110 @@
-import React, { useContext, useState } from "react";
-import { OtherSellContext } from "../context/OtherSellContext";
+import { useState } from "react";
 
-function OtherSellForm() {
-  const { addOtherSale } = useContext(OtherSellContext);
+function ProductForm({ onSave }) {
+  const today = new Date().toISOString().split("T")[0];
 
-  const [form, setForm] = useState({
-    date: "",
-    item: "",
-    amount: "",
+  const [product, setProduct] = useState({
+    name: "",
+    weight: "200gm",
+    salePrice: "",
+    effectiveFrom: today,
+    stock: "",
   });
 
   const handleChange = (e) => {
-    setForm({
-      ...form,
+    setProduct({
+      ...product,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = () => {
-    if (!form.item || !form.amount) {
-      alert("Please fill all fields");
+  const handleSave = () => {
+    if (product.name.trim() === "") {
+      alert("Please enter Product Name");
       return;
     }
 
-    addOtherSale({
-      ...form,
-      amount: Number(form.amount),
-    });
+    if (product.salePrice === "") {
+      alert("Please enter Sale Price");
+      return;
+    }
 
-    setForm({
-      date: "",
-      item: "",
-      amount: "",
-    });
+    onSave(product);
 
-    alert("Sell Added Successfully");
+    setProduct({
+      name: "",
+      weight: "200gm",
+      salePrice: "",
+      effectiveFrom: today,
+      stock: "",
+    });
   };
 
   return (
-    <div className="bg-white shadow rounded-lg p-6">
+    <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
 
-      <h2 className="text-xl font-bold mb-5">
-        Add Other Sell
+      <h2 className="text-2xl font-bold mb-5">
+        ➕ Add New Product
       </h2>
 
-      <div className="grid md:grid-cols-3 gap-4">
-
-        <input
-          type="date"
-          name="date"
-          value={form.date}
-          onChange={handleChange}
-          className="border p-3 rounded"
-        />
+      <div className="grid grid-cols-2 gap-4">
 
         <input
           type="text"
-          name="item"
-          placeholder="Item Name"
-          value={form.item}
+          name="name"
+          value={product.name}
           onChange={handleChange}
-          className="border p-3 rounded"
+          placeholder="Product Name"
+          className="border rounded-lg p-3"
+        />
+
+        <select
+          name="weight"
+          value={product.weight}
+          onChange={handleChange}
+          className="border rounded-lg p-3"
+        >
+          <option value="200gm">200gm</option>
+          <option value="500gm">500gm</option>
+        </select>
+
+        <input
+          type="number"
+          name="salePrice"
+          value={product.salePrice}
+          onChange={handleChange}
+          placeholder="Sale Price"
+          className="border rounded-lg p-3"
+        />
+
+        <input
+          type="date"
+          name="effectiveFrom"
+          value={product.effectiveFrom}
+          onChange={handleChange}
+          className="border rounded-lg p-3"
         />
 
         <input
           type="number"
-          name="amount"
-          placeholder="Sell Amount"
-          value={form.amount}
+          name="stock"
+          value={product.stock}
           onChange={handleChange}
-          className="border p-3 rounded"
+          placeholder="Opening Stock"
+          className="border rounded-lg p-3"
         />
 
       </div>
 
       <button
-        onClick={handleSubmit}
-        className="mt-5 bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700"
+        onClick={handleSave}
+        className="mt-5 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
       >
-        Save Sell
+        Save Product
       </button>
 
     </div>
   );
 }
 
-export default OtherSellForm;
+export default ProductForm;

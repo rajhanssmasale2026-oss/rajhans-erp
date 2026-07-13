@@ -6,6 +6,7 @@ export const ProductContext = createContext();
 export function ProductProvider({ children }) {
   const [products, setProducts] = useState(() => {
     const savedProducts = localStorage.getItem("products");
+
     return savedProducts
       ? JSON.parse(savedProducts)
       : productsData;
@@ -18,26 +19,77 @@ export function ProductProvider({ children }) {
     );
   }, [products]);
 
-  const updateStock = (productName, qty) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((item) =>
-        item.name === productName
+  // Add Product
+  const addProduct = (product) => {
+    const newCode = `RJM${String(
+      products.length + 1
+    ).padStart(3, "0")}`;
+
+    setProducts((prev) => [
+      ...prev,
+      {
+        code: newCode,
+        name: product.name,
+        weight: product.weight,
+        salePrice: Number(product.salePrice),
+        effectiveFrom: product.effectiveFrom,
+        stock: Number(product.stock),
+      },
+    ]);
+  };
+
+  // Delete Product
+  const deleteProduct = (code) => {
+    setProducts((prev) =>
+      prev.filter((item) => item.code !== code)
+    );
+  };
+
+  // Update Sale Price
+  const updateSalePrice = (
+    code,
+    salePrice,
+    effectiveFrom
+  ) => {
+    setProducts((prev) =>
+      prev.map((item) =>
+        item.code === code
           ? {
               ...item,
-              stock: Number(item.stock) - Number(qty),
+              salePrice: Number(salePrice),
+              effectiveFrom,
             }
           : item
       )
     );
   };
 
-  const addStock = (productName, qty) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((item) =>
+  // Stock Minus (Sales)
+  const updateStock = (productName, qty) => {
+    setProducts((prev) =>
+      prev.map((item) =>
         item.name === productName
           ? {
               ...item,
-              stock: Number(item.stock) + Number(qty),
+              stock:
+                Number(item.stock) -
+                Number(qty),
+            }
+          : item
+      )
+    );
+  };
+
+  // Stock Plus
+  const addStock = (productName, qty) => {
+    setProducts((prev) =>
+      prev.map((item) =>
+        item.name === productName
+          ? {
+              ...item,
+              stock:
+                Number(item.stock) +
+                Number(qty),
             }
           : item
       )
@@ -48,6 +100,9 @@ export function ProductProvider({ children }) {
     <ProductContext.Provider
       value={{
         products,
+        addProduct,
+        deleteProduct,
+        updateSalePrice,
         updateStock,
         addStock,
       }}

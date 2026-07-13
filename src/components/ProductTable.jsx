@@ -17,7 +17,6 @@ function ProductTable({ products, onDelete }) {
             <th>Code</th>
             <th>Product</th>
             <th>Pack</th>
-            <th>Purchase Price</th>
             <th>Sale Price</th>
             <th>Stock</th>
             <th>Action</th>
@@ -30,7 +29,6 @@ function ProductTable({ products, onDelete }) {
               <td>{product.code}</td>
               <td>{product.name}</td>
               <td>{product.weight}</td>
-              <td>₹ {product.purchasePrice}</td>
               <td>₹ {product.salePrice}</td>
               <td>{product.stock}</td>
 

@@ -9,6 +9,7 @@ import Sales from "./pages/Sales";
 import Expenses from "./pages/Expenses";
 import OtherSell from "./pages/OtherSell";
 import Reports from "./pages/Reports";
+import Backup from "./pages/Backup";
 
 function App() {
 
@@ -64,6 +65,11 @@ function App() {
       <Route
         path="/reports"
         element={<Reports />}
+      />
+
+      <Route
+        path="/backup"
+        element={<Backup />}
       />
 
     </Routes>

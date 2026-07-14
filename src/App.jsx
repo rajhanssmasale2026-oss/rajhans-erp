@@ -8,7 +8,7 @@ import Suppliers from "./pages/Suppliers";
 import Sales from "./pages/Sales";
 import Expenses from "./pages/Expenses";
 import OtherSell from "./pages/OtherSell";
-
+import Reports from "./pages/Reports";
 
 function App() {
 
@@ -59,6 +59,11 @@ function App() {
       <Route
         path="/other-sell"
         element={<OtherSell />}
+      />
+
+      <Route
+        path="/reports"
+        element={<Reports />}
       />
 
     </Routes>

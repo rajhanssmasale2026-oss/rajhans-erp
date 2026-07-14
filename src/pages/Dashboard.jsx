@@ -1,16 +1,43 @@
+import { useContext } from "react";
+
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import DashboardCards from "../components/DashboardCards";
 
+import { ProductContext } from "../context/ProductContext";
+import { CustomerContext } from "../context/CustomerContext";
+import { SalesContext } from "../context/SalesContext";
+
+
 function Dashboard() {
+
+
+  const { products } = useContext(ProductContext);
+  const { customers } = useContext(CustomerContext);
+  const { totalSales } = useContext(SalesContext);
+
+
+  const totalStock = products.reduce(
+    (total, item) =>
+      total + Number(item.stock || 0),
+    0
+  );
+
+
   return (
+
     <div className="bg-gray-100 min-h-screen">
+
       <Header />
 
+
       <div className="flex">
+
         <Sidebar />
 
+
         <main className="flex-1 p-8">
+
 
           <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
 
@@ -24,42 +51,103 @@ function Dashboard() {
 
           </div>
 
+
+
           <DashboardCards />
+
+
 
           <div className="grid grid-cols-2 gap-6 mt-6">
 
+
             <div className="bg-white rounded-xl shadow-lg p-6">
+
               <h2 className="text-2xl font-bold mb-4">
                 📊 Today's Summary
               </h2>
 
+
               <ul className="space-y-3">
-                <li>💰 Today's Sales : ₹0</li>
-                <li>🛒 Purchase : ₹0</li>
-                <li>📦 Available Stock : 5 Products</li>
-                <li>👥 Customers : 0</li>
+
+
+                <li>
+                  💰 Total Sales : ₹ {totalSales}
+                </li>
+
+
+                <li>
+                  🛒 Purchase : ₹0
+                </li>
+
+
+                <li>
+                  📦 Available Stock : {totalStock}
+                </li>
+
+
+                <li>
+                  👥 Customers : {customers.length}
+                </li>
+
+
               </ul>
+
+
             </div>
 
+
+
             <div className="bg-white rounded-xl shadow-lg p-6">
+
+
               <h2 className="text-2xl font-bold mb-4">
                 🔔 Notifications
               </h2>
 
+
               <ul className="space-y-3">
-                <li>✅ ERP Started Successfully</li>
-                <li>📦 Products Module Ready</li>
-                <li>🧾 Sales Module Coming Soon</li>
-                <li>📈 Reports Module Coming Soon</li>
+
+
+                <li>
+                  ✅ ERP Started Successfully
+                </li>
+
+
+                <li>
+                  📦 Products Module Ready
+                </li>
+
+
+                <li>
+                  🧾 Sales Module Ready
+                </li>
+
+
+                <li>
+                  📈 Reports Module Coming Soon
+                </li>
+
+
               </ul>
+
+
             </div>
+
 
           </div>
 
+
         </main>
+
+
       </div>
+
+
     </div>
+
   );
+
 }
+
 
 export default Dashboard;

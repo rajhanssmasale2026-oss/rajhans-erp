@@ -10,9 +10,8 @@ import { RawMaterialProvider } from "./context/RawMaterialContext.jsx";
 import { PurchaseProvider } from "./context/PurchaseContext.jsx";
 import { SalesProvider } from "./context/SalesContext.jsx";
 import { ExpenseProvider } from "./context/ExpenseContext.jsx";
-import {
-  OtherSellProvider,
-} from "./context/OtherSellContext.jsx";
+import { OtherSellProvider } from "./context/OtherSellContext.jsx";
+import { CustomerProvider } from "./context/CustomerContext.jsx";
 
 
 ReactDOM.createRoot(
@@ -35,7 +34,11 @@ ReactDOM.createRoot(
 
                 <OtherSellProvider>
 
-                  <App />
+                  <CustomerProvider>
+
+                    <App />
+
+                  </CustomerProvider>
 
                 </OtherSellProvider>
 

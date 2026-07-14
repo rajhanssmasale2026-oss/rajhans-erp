@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 
@@ -11,7 +13,12 @@ import ExpenseReport from "../components/ExpenseReport";
 import ProfitLossReport from "../components/ProfitLossReport";
 
 function Reports() {
+
+  const [activeReport, setActiveReport] =
+    useState("sales");
+
   return (
+
     <div className="bg-gray-100 min-h-screen">
 
       <Header />
@@ -34,26 +41,39 @@ function Reports() {
 
           </div>
 
-          <ReportMenu />
+          <ReportMenu
+            activeReport={activeReport}
+            setActiveReport={setActiveReport}
+          />
 
           <ReportFilter />
 
           <ReportSummary />
 
-          <SalesReport />
+          {activeReport === "sales" && (
+            <SalesReport />
+          )}
 
-          <PurchaseReport />
+          {activeReport === "purchase" && (
+            <PurchaseReport />
+          )}
 
-          <ExpenseReport />
+          {activeReport === "expense" && (
+            <ExpenseReport />
+          )}
 
-          <ProfitLossReport />
+          {activeReport === "profit" && (
+            <ProfitLossReport />
+          )}
 
         </main>
 
       </div>
 
     </div>
+
   );
+
 }
 
 export default Reports;

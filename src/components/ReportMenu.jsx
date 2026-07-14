@@ -1,12 +1,34 @@
-function ReportMenu() {
+function ReportMenu({
+  activeReport,
+  setActiveReport,
+}) {
+
   const menus = [
-    "💰 Sales",
-    "🛒 Purchase",
-    "💸 Expense",
-    "📈 Profit & Loss",
+
+    {
+      id: "sales",
+      label: "💰 Sales",
+    },
+
+    {
+      id: "purchase",
+      label: "🛒 Purchase",
+    },
+
+    {
+      id: "expense",
+      label: "💸 Expense",
+    },
+
+    {
+      id: "profit",
+      label: "📈 Profit & Loss",
+    },
+
   ];
 
   return (
+
     <div className="bg-white rounded-xl shadow-lg p-4 mb-6">
 
       <div className="flex gap-4 flex-wrap">
@@ -14,10 +36,17 @@ function ReportMenu() {
         {menus.map((menu) => (
 
           <button
-            key={menu}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-semibold transition"
+            key={menu.id}
+            onClick={() =>
+              setActiveReport(menu.id)
+            }
+            className={`px-5 py-3 rounded-lg font-semibold transition ${
+              activeReport === menu.id
+                ? "bg-blue-700 text-white"
+                : "bg-gray-200 hover:bg-blue-500 hover:text-white"
+            }`}
           >
-            {menu}
+            {menu.label}
           </button>
 
         ))}
@@ -25,7 +54,9 @@ function ReportMenu() {
       </div>
 
     </div>
+
   );
+
 }
 
 export default ReportMenu;

@@ -1,6 +1,12 @@
-function ProductTable({ products, onDelete }) {
+function ProductTable({
+  products,
+  onDelete,
+  onAddStock,
+  onEditPrice,
+}) {
   return (
     <div style={{ padding: "20px" }}>
+
       <h2>📦 Product List</h2>
 
       <table
@@ -12,45 +18,118 @@ function ProductTable({ products, onDelete }) {
           background: "white",
         }}
       >
+
         <thead>
+
           <tr>
+
             <th>Code</th>
+
             <th>Product</th>
+
             <th>Pack</th>
+
             <th>Sale Price</th>
+
+            <th>Effective From</th>
+
             <th>Stock</th>
+
             <th>Action</th>
+
           </tr>
+
         </thead>
 
         <tbody>
+
           {products.map((product) => (
+
             <tr key={product.code}>
+
               <td>{product.code}</td>
+
               <td>{product.name}</td>
+
               <td>{product.weight}</td>
+
               <td>₹ {product.salePrice}</td>
+
+              <td>
+                {product.effectiveFrom || "-"}
+              </td>
+
               <td>{product.stock}</td>
 
               <td>
-                <button
-                  onClick={() => onDelete(product.code)}
+
+                <div
                   style={{
-                    background: "#dc2626",
-                    color: "white",
-                    border: "none",
-                    padding: "8px 14px",
-                    borderRadius: "6px",
-                    cursor: "pointer",
+                    display: "flex",
+                    gap: "8px",
                   }}
                 >
-                  🗑 Delete
-                </button>
+
+                  <button
+                    onClick={() =>
+                      onAddStock(product.name)
+                    }
+                    style={{
+                      background: "#16a34a",
+                      color: "white",
+                      border: "none",
+                      padding: "8px 12px",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    + Stock
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      onEditPrice(product)
+                    }
+                    style={{
+                      background: "#2563eb",
+                      color: "white",
+                      border: "none",
+                      padding: "8px 12px",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    ✏️ Edit Price
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      onDelete(product.code)
+                    }
+                    style={{
+                      background: "#dc2626",
+                      color: "white",
+                      border: "none",
+                      padding: "8px 12px",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    🗑 Delete
+                  </button>
+
+                </div>
+
               </td>
+
             </tr>
+
           ))}
+
         </tbody>
+
       </table>
+
     </div>
   );
 }

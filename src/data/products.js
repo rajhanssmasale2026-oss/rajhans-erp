@@ -3,8 +3,8 @@ const products = [
     code: "RJM001",
     name: "हळद पावडर",
     weight: "200gm",
-    purchasePrice: 60,
     salePrice: 80,
+    effectiveFrom: "2026-07-14",
     stock: 100,
   },
 
@@ -12,8 +12,8 @@ const products = [
     code: "RJM002",
     name: "लाल तिखट",
     weight: "200gm",
-    purchasePrice: 90,
     salePrice: 120,
+    effectiveFrom: "2026-07-14",
     stock: 100,
   },
 
@@ -21,8 +21,8 @@ const products = [
     code: "RJM003",
     name: "धणे पावडर",
     weight: "200gm",
-    purchasePrice: 70,
     salePrice: 90,
+    effectiveFrom: "2026-07-14",
     stock: 100,
   },
 
@@ -30,8 +30,8 @@ const products = [
     code: "RJM004",
     name: "जिरे पावडर",
     weight: "200gm",
-    purchasePrice: 130,
     salePrice: 160,
+    effectiveFrom: "2026-07-14",
     stock: 100,
   },
 
@@ -39,8 +39,8 @@ const products = [
     code: "RJM005",
     name: "गरम मसाला",
     weight: "200gm",
-    purchasePrice: 110,
     salePrice: 140,
+    effectiveFrom: "2026-07-14",
     stock: 100,
   },
 ];

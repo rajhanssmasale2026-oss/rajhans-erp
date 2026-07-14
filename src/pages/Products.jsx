@@ -1,17 +1,24 @@
 import React, { useContext, useState } from "react";
 import { ProductContext } from "../context/ProductContext";
 import ProductForm from "../components/ProductForm";
+import PriceEditModal from "../components/PriceEditModal";
+import PriceHistory from "../components/PriceHistory";
 
 function Products() {
   const {
-    products,
-    addProduct,
-    addStock,
-    deleteProduct,
-  } = useContext(ProductContext);
+  products,
+  addProduct,
+  addStock,
+  deleteProduct,
+  updateSalePrice,
+} = useContext(ProductContext);
 
   const [showForm, setShowForm] =
     useState(false);
+    const [selectedProduct, setSelectedProduct] =
+  useState(null);
+  const [historyProduct, setHistoryProduct] =
+  useState(null);
 
   const handleAddStock = (productName) => {
     const qty = prompt("Enter Stock Quantity");
@@ -27,12 +34,33 @@ function Products() {
   };
 
   const handleSaveProduct = (product) => {
-    addProduct(product);
 
-    setShowForm(false);
+  addProduct(product);
 
-    alert("Product Added Successfully");
-  };
+  setShowForm(false);
+
+  alert("Product Added Successfully");
+
+};
+
+const handlePriceSave = (
+  code,
+  salePrice,
+  effectiveFrom
+) => {
+
+  updateSalePrice(
+    code,
+    salePrice,
+    effectiveFrom
+  );
+
+  setSelectedProduct(null);
+
+  alert("Sale Price Updated Successfully");
+
+};
+
 
   return (
     <div className="p-6">
@@ -43,7 +71,9 @@ function Products() {
           📦 Product Master
         </h1>
 
-        <button
+        
+
+<button
           onClick={() => setShowForm(true)}
           className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg"
         >
@@ -138,6 +168,18 @@ function Products() {
                   <td className="border p-3">
 
                     <div className="flex gap-2">
+                      <button
+  onClick={() => setSelectedProduct(item)}
+  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded"
+>
+  ✏️ Edit Price
+  <button
+  onClick={() => setHistoryProduct(item)}
+  className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded"
+>
+  📜 History
+</button>
+</button>
 
                       <button
                         onClick={() =>
@@ -181,7 +223,30 @@ function Products() {
 
       </div>
 
-    </div>
+    {selectedProduct && (
+
+  <PriceEditModal
+
+    product={selectedProduct}
+
+    onSave={handlePriceSave}
+
+    onClose={() =>
+      setSelectedProduct(null)
+    }
+
+  />
+
+)}
+{historyProduct && (
+  <PriceHistory
+    product={historyProduct}
+    onClose={() =>
+      setHistoryProduct(null)
+    }
+  />
+)}
+</div>
   );
 }
 

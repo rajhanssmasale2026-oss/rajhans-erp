@@ -47,22 +47,48 @@ export function ProductProvider({ children }) {
 
   // Update Sale Price
   const updateSalePrice = (
-    code,
-    salePrice,
-    effectiveFrom
-  ) => {
-    setProducts((prev) =>
-      prev.map((item) =>
-        item.code === code
-          ? {
-              ...item,
-              salePrice: Number(salePrice),
-              effectiveFrom,
-            }
-          : item
-      )
-    );
-  };
+  code,
+  salePrice,
+  effectiveFrom
+) => {
+
+  setProducts((prev) =>
+
+    prev.map((item) => {
+
+      if (item.code !== code)
+        return item;
+
+      const history =
+        item.priceHistory || [];
+
+      return {
+
+        ...item,
+
+        salePrice: Number(salePrice),
+
+        effectiveFrom,
+
+        priceHistory: [
+
+          ...history,
+
+          {
+            salePrice: Number(salePrice),
+            effectiveFrom,
+            changedAt: new Date().toLocaleString(),
+          },
+
+        ],
+
+      };
+
+    })
+
+  );
+
+};
 
   // Stock Minus (Sales)
   const updateStock = (productName, qty) => {

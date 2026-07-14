@@ -2,12 +2,15 @@ import { useContext } from "react";
 import { ProductContext } from "../context/ProductContext";
 import { CustomerContext } from "../context/CustomerContext";
 import { SalesContext } from "../context/SalesContext";
+import { PurchaseContext } from "../context/PurchaseContext";
 
 function DashboardCards() {
 
   const { products } = useContext(ProductContext);
   const { customers } = useContext(CustomerContext);
   const { totalSales } = useContext(SalesContext);
+  const { totalPurchase } =
+  useContext(PurchaseContext);
 
 
   const totalProducts = products.length;
@@ -47,9 +50,9 @@ function DashboardCards() {
     },
 
     {
-      title: "📊 Reports",
-      value: "Ready",
-      color: "bg-red-500"
+      title: "🛒 Purchase",
+  value: `₹ ${totalPurchase}`,
+  color: "bg-red-500"
     },
 
     {

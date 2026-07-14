@@ -7,6 +7,7 @@ import DashboardCards from "../components/DashboardCards";
 import { ProductContext } from "../context/ProductContext";
 import { CustomerContext } from "../context/CustomerContext";
 import { SalesContext } from "../context/SalesContext";
+import { PurchaseContext } from "../context/PurchaseContext";
 
 
 function Dashboard() {
@@ -15,6 +16,9 @@ function Dashboard() {
   const { products } = useContext(ProductContext);
   const { customers } = useContext(CustomerContext);
   const { totalSales } = useContext(SalesContext);
+  const { totalPurchase } =
+  useContext(PurchaseContext);
+
 
 
   const totalStock = products.reduce(
@@ -22,6 +26,14 @@ function Dashboard() {
       total + Number(item.stock || 0),
     0
   );
+
+
+  // Low Stock Alert (Below 10)
+  const lowStockProducts = products.filter(
+    (item) =>
+      Number(item.stock || 0) < 10
+  );
+
 
 
   return (
@@ -60,11 +72,14 @@ function Dashboard() {
           <div className="grid grid-cols-2 gap-6 mt-6">
 
 
+
             <div className="bg-white rounded-xl shadow-lg p-6">
+
 
               <h2 className="text-2xl font-bold mb-4">
                 📊 Today's Summary
               </h2>
+
 
 
               <ul className="space-y-3">
@@ -76,7 +91,7 @@ function Dashboard() {
 
 
                 <li>
-                  🛒 Purchase : ₹0
+                  🛒 Total Purchase : ₹ {totalPurchase}
                 </li>
 
 
@@ -97,12 +112,14 @@ function Dashboard() {
 
 
 
+
             <div className="bg-white rounded-xl shadow-lg p-6">
 
 
               <h2 className="text-2xl font-bold mb-4">
                 🔔 Notifications
               </h2>
+
 
 
               <ul className="space-y-3">
@@ -113,25 +130,40 @@ function Dashboard() {
                 </li>
 
 
-                <li>
-                  📦 Products Module Ready
-                </li>
 
+                {
+                  lowStockProducts.length > 0 ? (
 
-                <li>
-                  🧾 Sales Module Ready
-                </li>
+                    <li className="text-red-600 font-bold">
 
+                      ⚠️ Low Stock:
+                      {" "}
+                      {
+                        lowStockProducts
+                          .map(item => item.name)
+                          .join(", ")
+                      }
 
-                <li>
-                  📈 Reports Module Coming Soon
-                </li>
+                    </li>
+
+                  ) : (
+
+                    <li className="text-green-600">
+
+                      ✅ Stock Level Good
+
+                    </li>
+
+                  )
+                }
+
 
 
               </ul>
 
 
             </div>
+
 
 
           </div>

@@ -37,6 +37,18 @@ export function PurchaseProvider({ children }) {
       )
     );
   };
+  const totalPurchase =
+  purchases.reduce(
+    (sum, item) =>
+      sum +
+      Number(
+        item.total ||
+        item.totalAmount ||
+        item.amount ||
+        0
+      ),
+    0
+  );
 
   return (
     <PurchaseContext.Provider
@@ -45,6 +57,7 @@ export function PurchaseProvider({ children }) {
         addPurchase,
         deletePurchase,
         updatePurchase,
+         totalPurchase,
       }}
     >
       {children}

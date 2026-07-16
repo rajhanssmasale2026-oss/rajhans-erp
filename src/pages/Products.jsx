@@ -3,6 +3,7 @@ import { ProductContext } from "../context/ProductContext";
 import ProductForm from "../components/ProductForm";
 import PriceEditModal from "../components/PriceEditModal";
 import PriceHistory from "../components/PriceHistory";
+import { addProduct as addProductAPI } from "../services/productService";
 
 function Products() {
   const {
@@ -33,31 +34,32 @@ function Products() {
     addStock(productName, Number(qty));
   };
 
-  const handleSaveProduct = (product) => {
+  const handleSaveProduct = async (product) => {
 
-  addProduct(product);
+  try {
 
-  setShowForm(false);
+    const newProduct = {
+      code: `RJM${String(products.length + 1).padStart(3, "0")}`,
+      name: product.name,
+      weight: product.weight,
+      purchase_price: 0,
+      sale_price: Number(product.salePrice),
+      stock: Number(product.stock),
+    };
 
-  alert("Product Added Successfully");
+    await addProductAPI(newProduct);
 
-};
+    alert("Product Saved Successfully");
 
-const handlePriceSave = (
-  code,
-  salePrice,
-  effectiveFrom
-) => {
+    window.location.reload();
 
-  updateSalePrice(
-    code,
-    salePrice,
-    effectiveFrom
-  );
+  } catch (err) {
 
-  setSelectedProduct(null);
+    console.error(err);
 
-  alert("Sale Price Updated Successfully");
+    alert("Error Saving Product");
+
+  }
 
 };
 

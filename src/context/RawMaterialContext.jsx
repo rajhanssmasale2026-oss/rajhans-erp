@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import rawMaterialsData from "../data/rawMaterials";
+import { getRawMaterials } from "../services/rawMaterialService";
 
 export const RawMaterialContext = createContext();
 
@@ -10,6 +11,30 @@ export function RawMaterialProvider({ children }) {
   });
 
   useEffect(() => {
+  async function loadMaterials() {
+    try {
+      const data = await getRawMaterials();
+
+      if (data.length > 0) {
+        setRawMaterials(
+          data.map((item) => ({
+            id: item.id,
+            code: item.code,
+            name: item.name,
+            unit: item.unit,
+            stock: Number(item.stock),
+            purchasePrice: Number(item.purchase_price),
+          }))
+        );
+      }
+    } catch (err) {
+      console.error("Error loading raw materials:", err);
+    }
+  }
+
+  loadMaterials();
+}, []);
+useEffect(() => {
     localStorage.setItem(
       "rawMaterials",
       JSON.stringify(rawMaterials)

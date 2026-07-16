@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 
 import { PurchaseContext } from "../context/PurchaseContext";
 import { RawMaterialContext } from "../context/RawMaterialContext";
+import { addPurchase as addPurchaseAPI } from "../services/purchaseService";
 
 function Purchase() {
 
@@ -37,7 +38,7 @@ function Purchase() {
 
 
 
-  const handleSave = () => {
+  const handleSave = async () => {
 
     if (
       !purchase.date ||
@@ -51,23 +52,37 @@ function Purchase() {
     }
 
 
-    const newPurchase = {
-      id: Date.now(),
-      ...purchase,
-      total,
-    };
+    const dbPurchase = {
+  purchase_date: purchase.date,
+  bill_no: purchase.billNo,
+  supplier: purchase.supplier,
+  material: purchase.material,
+  quantity: Number(purchase.quantity),
+  rate: Number(purchase.rate),
+  total,
+  remarks: purchase.remarks,
+};
 
+try {
+  await addPurchaseAPI(dbPurchase);
 
-    addPurchase(newPurchase);
+  addPurchase({
+    id: Date.now(),
+    ...purchase,
+    total,
+  });
 
+  updateStock(
+    purchase.material,
+    purchase.quantity
+  );
 
-    updateStock(
-      purchase.material,
-      purchase.quantity
-    );
+  alert("Purchase Saved Successfully");
 
-
-    alert("Purchase Saved Successfully");
+} catch (err) {
+  console.error(err);
+  alert("Error Saving Purchase");
+}
 
 
     setPurchase({

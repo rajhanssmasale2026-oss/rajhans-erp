@@ -1,32 +1,95 @@
 import { createContext, useEffect, useState } from "react";
 import productsData from "../data/products";
+import { getProducts } from "../services/productService";
 
 export const ProductContext = createContext();
 
 export function ProductProvider({ children }) {
-  const [products, setProducts] = useState(() => {
-    const savedProducts = localStorage.getItem("products");
 
-    return savedProducts
-      ? JSON.parse(savedProducts)
-      : productsData;
-  });
+  const [products, setProducts] = useState([]);
 
+  // Load Products from Backend
   useEffect(() => {
-    localStorage.setItem(
-      "products",
-      JSON.stringify(products)
-    );
+
+    async function loadProducts() {
+
+      try {
+
+        const data = await getProducts();
+
+        if (data && data.length > 0) {
+
+          const formattedProducts = data.map((item) => ({
+            code: item.code,
+            name: item.name,
+            weight: item.weight,
+            salePrice: Number(item.sale_price),
+            stock: Number(item.stock),
+            effectiveFrom: item.effectiveFrom,
+            priceHistory: item.priceHistory || [],
+          }));
+
+          setProducts(formattedProducts);
+
+        } else {
+
+          setProducts(productsData);
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Backend Product Load Error",
+          error
+        );
+
+        // Backend बंद असेल तर जुना data वापरेल
+        const savedProducts =
+          localStorage.getItem("products");
+
+        setProducts(
+          savedProducts
+            ? JSON.parse(savedProducts)
+            : productsData
+        );
+
+      }
+
+    }
+
+    loadProducts();
+
+  }, []);
+
+
+  // LocalStorage Backup
+  useEffect(() => {
+
+    if (products.length > 0) {
+
+      localStorage.setItem(
+        "products",
+        JSON.stringify(products)
+      );
+
+    }
+
   }, [products]);
+
 
   // Add Product
   const addProduct = (product) => {
+
     const newCode = `RJM${String(
       products.length + 1
     ).padStart(3, "0")}`;
 
+
     setProducts((prev) => [
+
       ...prev,
+
       {
         code: newCode,
         name: product.name,
@@ -35,105 +98,167 @@ export function ProductProvider({ children }) {
         effectiveFrom: product.effectiveFrom,
         stock: Number(product.stock),
       },
+
     ]);
+
   };
+
 
   // Delete Product
   const deleteProduct = (code) => {
+
     setProducts((prev) =>
-      prev.filter((item) => item.code !== code)
+      prev.filter(
+        (item) => item.code !== code
+      )
     );
+
   };
+
 
   // Update Sale Price
   const updateSalePrice = (
-  code,
-  salePrice,
-  effectiveFrom
-) => {
+    code,
+    salePrice,
+    effectiveFrom
+  ) => {
 
-  setProducts((prev) =>
+    setProducts((prev) =>
 
-    prev.map((item) => {
+      prev.map((item) => {
 
-      if (item.code !== code)
-        return item;
+        if (item.code !== code)
+          return item;
 
-      const history =
-        item.priceHistory || [];
 
-      return {
+        const history =
+          item.priceHistory || [];
 
-        ...item,
 
-        salePrice: Number(salePrice),
+        return {
 
-        effectiveFrom,
+          ...item,
 
-        priceHistory: [
+          salePrice: Number(salePrice),
 
-          ...history,
+          effectiveFrom,
 
-          {
-            salePrice: Number(salePrice),
-            effectiveFrom,
-            changedAt: new Date().toLocaleString(),
-          },
+          priceHistory: [
 
-        ],
+            ...history,
 
-      };
+            {
+              salePrice:
+                Number(salePrice),
 
-    })
+              effectiveFrom,
 
-  );
+              changedAt:
+                new Date()
+                .toLocaleString(),
+            },
 
-};
+          ],
+
+        };
+
+      })
+
+    );
+
+  };
+
 
   // Stock Minus (Sales)
-  const updateStock = (productName, qty) => {
+  const updateStock = (
+    productName,
+    qty
+  ) => {
+
     setProducts((prev) =>
+
       prev.map((item) =>
+
         item.name === productName
-          ? {
-              ...item,
-              stock:
-                Number(item.stock) -
-                Number(qty),
-            }
-          : item
+
+        ? {
+
+          ...item,
+
+          stock:
+          Number(item.stock)
+          -
+          Number(qty),
+
+        }
+
+        : item
+
       )
+
     );
+
   };
 
-  // Stock Plus
-  const addStock = (productName, qty) => {
+
+  // Stock Plus (Purchase)
+  const addStock = (
+    productName,
+    qty
+  ) => {
+
     setProducts((prev) =>
+
       prev.map((item) =>
+
         item.name === productName
-          ? {
-              ...item,
-              stock:
-                Number(item.stock) +
-                Number(qty),
-            }
-          : item
+
+        ? {
+
+          ...item,
+
+          stock:
+          Number(item.stock)
+          +
+          Number(qty),
+
+        }
+
+        : item
+
       )
+
     );
+
   };
+
 
   return (
+
     <ProductContext.Provider
+
       value={{
+
         products,
+
         addProduct,
+
         deleteProduct,
+
         updateSalePrice,
+
         updateStock,
+
         addStock,
+
       }}
+
     >
+
       {children}
+
     </ProductContext.Provider>
+
   );
+
 }

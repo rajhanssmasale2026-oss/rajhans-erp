@@ -14,6 +14,8 @@ const productRoutes = require("./routes/productRoutes");
 const rawMaterialRoutes = require("./routes/rawMaterialRoutes");
 const purchaseRoutes = require("./routes/purchaseRoutes");
 const salesRoutes = require("./routes/salesRoutes");
+const reportRoutes = require("./routes/reportRoutes");
+const expenseRoutes = require("./routes/expenseRoutes");
 
 // Home
 app.get("/", (req, res) => {
@@ -53,6 +55,12 @@ app.use("/purchases", purchaseRoutes);
 
 // Sales Routes
 app.use("/sales", salesRoutes);
+
+// Report Routes
+app.use("/reports", reportRoutes);
+
+// Expense Routes
+app.use("/expenses", expenseRoutes);
 
 const PORT = process.env.PORT || 5000;
 

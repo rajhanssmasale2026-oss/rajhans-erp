@@ -59,7 +59,7 @@ function ExpenseTable() {
                 <tr key={item.id}>
 
                   <td className="border p-2">
-                    {item.date}
+                    {item.expense_date}
                   </td>
 
 

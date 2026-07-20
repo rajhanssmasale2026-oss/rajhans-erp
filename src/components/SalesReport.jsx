@@ -63,7 +63,7 @@ function SalesReport() {
                 </td>
 
                 <td className="border p-3">
-                  {sale.customerName}
+                  {sale.customer}
                 </td>
 
                 <td className="border p-3">

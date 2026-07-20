@@ -24,34 +24,53 @@ function ExpenseForm() {
   };
 
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
 
-    if (
-      !expense.category ||
-      !expense.amount
-    ) {
-      alert("Please fill expense details");
-      return;
-    }
+  if (!expense.category || !expense.amount) {
 
+    alert("Please fill expense details");
 
-    addExpense({
-      ...expense,
+    return;
+
+  }
+
+  try {
+
+    await addExpense({
+
+      expense_date: expense.date,
+
+      category: expense.category,
+
+      description: expense.description,
+
       amount: Number(expense.amount),
-    });
 
+    });
 
     setExpense({
-      date: "",
-      category: "",
-      description: "",
-      amount: "",
-    });
 
+      date: "",
+
+      category: "",
+
+      description: "",
+
+      amount: "",
+
+    });
 
     alert("Expense Added Successfully");
 
-  };
+  } catch (err) {
+
+    console.error(err);
+
+    alert("Expense Save Failed");
+
+  }
+
+};
 
 
   return (

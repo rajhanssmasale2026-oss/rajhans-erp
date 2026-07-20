@@ -17,25 +17,49 @@ function OtherSellForm() {
     });
   };
 
-  const handleSubmit = () => {
-    if (!form.item || !form.amount) {
-      alert("Please fill all fields");
-      return;
-    }
+  const handleSubmit = async () => {
 
-    addOtherSale({
-      ...form,
+  if (!form.item || !form.amount) {
+
+    alert("Please fill all fields");
+
+    return;
+
+  }
+
+  try {
+
+    await addOtherSale({
+
+      sell_date: form.date,
+
+      item_name: form.item,
+
       amount: Number(form.amount),
+
     });
 
     setForm({
+
       date: "",
+
       item: "",
+
       amount: "",
+
     });
 
     alert("Sell Added Successfully");
-  };
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert("Sell Save Failed");
+
+  }
+
+};
 
   return (
     <div className="bg-white shadow rounded-lg p-6">

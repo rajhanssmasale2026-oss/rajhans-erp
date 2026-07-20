@@ -24,17 +24,21 @@ function OtherSellTable() {
 
             <tr className="bg-green-600 text-white">
 
-              <th className="border p-2">Date</th>
+              <th className="border p-2">
+                Date
+              </th>
 
-              <th className="border p-2">Item</th>
+              <th className="border p-2">
+                Item
+              </th>
 
-              <th className="border p-2">Price</th>
+              <th className="border p-2">
+                Amount
+              </th>
 
-              <th className="border p-2">Qty</th>
-
-              <th className="border p-2">Total</th>
-
-              <th className="border p-2">Action</th>
+              <th className="border p-2">
+                Action
+              </th>
 
             </tr>
 
@@ -47,10 +51,12 @@ function OtherSellTable() {
               <tr>
 
                 <td
-                  colSpan="6"
+                  colSpan="4"
                   className="text-center p-4"
                 >
+
                   No Record Found
+
                 </td>
 
               </tr>
@@ -62,23 +68,15 @@ function OtherSellTable() {
                 <tr key={item.id}>
 
                   <td className="border p-2">
-                    {item.date}
+                    {item.sell_date}
                   </td>
 
                   <td className="border p-2">
-                    {item.item}
+                    {item.item_name}
                   </td>
 
                   <td className="border p-2">
-                    ₹ {item.price}
-                  </td>
-
-                  <td className="border p-2">
-                    {item.quantity}
-                  </td>
-
-                  <td className="border p-2">
-                    ₹ {item.total}
+                    ₹ {item.amount}
                   </td>
 
                   <td className="border p-2">

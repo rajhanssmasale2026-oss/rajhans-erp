@@ -1,8 +1,14 @@
-import React, {
+import {
   createContext,
   useEffect,
   useState,
 } from "react";
+
+import {
+  getSell,
+  addSell as addSellAPI,
+  deleteSell as deleteSellAPI,
+} from "../services/sellService";
 
 export const OtherSellContext = createContext();
 
@@ -11,56 +17,78 @@ export function OtherSellProvider({
 }) {
 
   const [otherSales, setOtherSales] =
-    useState(() => {
-
-      const saved =
-        localStorage.getItem(
-          "otherSales"
-        );
-
-      return saved
-        ? JSON.parse(saved)
-        : [];
-
-    });
-
+    useState([]);
 
   useEffect(() => {
 
-    localStorage.setItem(
-      "otherSales",
-      JSON.stringify(otherSales)
-    );
+    async function loadSell() {
 
-  }, [otherSales]);
+      try {
 
+        const data = await getSell();
 
-  const addOtherSale = (sale) => {
+        if (Array.isArray(data)) {
 
-    setOtherSales((prev) => [
+          setOtherSales(data);
 
-      ...prev,
+        }
 
-      {
-        id: Date.now(),
-        ...sale,
-      },
+      } catch (err) {
 
-    ]);
+        console.error(err);
+
+      }
+
+    }
+
+    loadSell();
+
+  }, []);
+
+  const addOtherSale = async (sale) => {
+
+    try {
+
+      const response =
+        await addSellAPI(sale);
+
+      setOtherSales((prev) => [
+
+        response.sell,
+
+        ...prev,
+
+      ]);
+
+    } catch (err) {
+
+      console.error(err);
+
+      alert("Sell Save Failed");
+
+    }
 
   };
 
+  const deleteOtherSale = async (id) => {
 
-  const deleteOtherSale = (id) => {
+    try {
 
-    setOtherSales((prev) =>
-      prev.filter(
-        (item) => item.id !== id
-      )
-    );
+      await deleteSellAPI(id);
+
+      setOtherSales((prev) =>
+        prev.filter(
+          (item) => item.id !== id
+        )
+      );
+
+    } catch (err) {
+
+      console.error(err);
+
+    }
 
   };
-
 
   const updateOtherSale = (
     id,
@@ -84,17 +112,15 @@ export function OtherSellProvider({
 
   };
 
-
   const totalOtherSales =
     otherSales.reduce(
 
       (sum, item) =>
-        sum + Number(item.total || 0),
+        sum + Number(item.amount || 0),
 
       0
 
     );
-
 
   return (
 

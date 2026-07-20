@@ -19,19 +19,17 @@ export function drawTable(doc, sale) {
   };
 
 
-  const rows = sale.products.map((item, index) => [
+  console.log("SALE PRODUCTS =", sale.products);
 
-    index + 1,
+const rows = (sale.products ?? []).map((item, index) => [
+  index + 1,
+  productNames[item.product] || item.product,
+  item.quantity,
+  "Rs. " + item.price,
+  "Rs. " + item.total,
+]);
 
-    productNames[item.product] || item.product,
-
-    item.quantity,
-
-    "Rs. " + item.price,
-
-    "Rs. " + item.total,
-
-  ]);
+console.log("ROWS =", rows);
 
 
   autoTable(doc, {

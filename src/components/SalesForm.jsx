@@ -27,10 +27,12 @@ function SalesForm() {
     product: "",
     quantity: "",
     price: "",
+    paidAmount: "",
   });
 
 
   const [items, setItems] = useState([]);
+  const [paidAmount, setPaidAmount] = useState(0);
 
 
   const handleChange = (e) => {
@@ -100,6 +102,7 @@ function SalesForm() {
 
 
   const handleAddSale = () => {
+    console.log("HANDLE ADD SALE CLICKED");
 
 
     if (!sale.customerName) {
@@ -128,28 +131,31 @@ function SalesForm() {
 
 
 
+    console.log("STATE =", paidAmount);
     addSale({
 
-      invoice:
-        "INV-" + Date.now(),
+  invoice:
+    "INV-" + Date.now(),
 
-      date:
-        new Date()
-        .toLocaleDateString(),
+  date:
+    new Date().toLocaleDateString(),
 
-      customer:
-        sale.customerName,
+  customer:
+    sale.customerName,
 
-      mobile:
-        sale.mobile,
+  mobile:
+    sale.mobile,
 
-      products:
-        items,
+  products:
+    items,
 
-      totalAmount:
-        grandTotal,
+  totalAmount:
+    grandTotal,
 
-    });
+  paidAmount:
+    Number(paidAmount),
+
+});
 
 
 
@@ -169,6 +175,7 @@ function SalesForm() {
 
 
     setItems([]);
+    setPaidAmount(0);
 
 
     setSale({
@@ -233,10 +240,10 @@ function SalesForm() {
 
 
       <InvoiceSummary
-
-        items={items}
-
-      />
+  items={items}
+  paidAmount={paidAmount}
+  setPaidAmount={setPaidAmount}
+/>
 
 
 

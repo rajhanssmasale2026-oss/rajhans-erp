@@ -95,6 +95,10 @@ export function generateInvoicePDF(sale) {
   // Product Table
   // =========================
 
+  console.log(
+  "PDF SALE JSON =",
+  JSON.stringify(sale, null, 2)
+);
   drawTable(doc, sale);
 
 

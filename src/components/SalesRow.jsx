@@ -74,14 +74,15 @@ function SalesRow({
 
       <td className="border p-2 text-center">
 
-        <button
-          onClick={() =>
-            generateInvoicePDF(sale)
-          }
-          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"
-        >
-          PDF
-        </button>
+       <button
+  onClick={() => {
+    console.log("SALE FROM ROW =", sale);
+    generateInvoicePDF(sale);
+  }}
+  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"
+>
+  PDF
+</button>
 
       </td>
 

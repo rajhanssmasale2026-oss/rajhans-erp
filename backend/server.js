@@ -13,6 +13,7 @@ const pool = require("./db");
 const productRoutes = require("./routes/productRoutes");
 const rawMaterialRoutes = require("./routes/rawMaterialRoutes");
 const purchaseRoutes = require("./routes/purchaseRoutes");
+const salesRoutes = require("./routes/salesRoutes");
 
 // Home
 app.get("/", (req, res) => {
@@ -49,6 +50,9 @@ app.use("/raw-materials", rawMaterialRoutes);
 
 // Purchase Routes
 app.use("/purchases", purchaseRoutes);
+
+// Sales Routes
+app.use("/sales", salesRoutes);
 
 const PORT = process.env.PORT || 5000;
 

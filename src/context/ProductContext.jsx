@@ -1,6 +1,10 @@
 import { createContext, useEffect, useState } from "react";
 import productsData from "../data/products";
-import { getProducts } from "../services/productService";
+import {
+  getProducts,
+  updateProductStock,
+  addProductStock,
+} from "../services/productService";
 
 export const ProductContext = createContext();
 
@@ -20,6 +24,7 @@ export function ProductProvider({ children }) {
         if (data && data.length > 0) {
 
           const formattedProducts = data.map((item) => ({
+            id: item.id,
             code: item.code,
             name: item.name,
             weight: item.weight,
@@ -170,18 +175,39 @@ export function ProductProvider({ children }) {
 
 
   // Stock Minus (Sales)
-  const updateStock = (
-    productName,
-    qty
-  ) => {
+ const updateStock = async (
+  productName,
+  qty
+) => {
 
-    setProducts((prev) =>
+  const product = products.find(
+    (item) =>
+      item.name === productName
+  );
 
-      prev.map((item) =>
 
-        item.name === productName
+  if (!product) {
+    console.log("Product not found");
+    return;
+  }
 
-        ? {
+
+  
+  // Backend stock update
+await updateProductStock(
+  product.id,
+  Number(qty)
+);
+
+
+  // Frontend update
+  setProducts((prev) =>
+
+    prev.map((item) =>
+
+      item.name === productName
+
+      ? {
 
           ...item,
 
@@ -192,45 +218,43 @@ export function ProductProvider({ children }) {
 
         }
 
-        : item
+      : item
 
-      )
+    )
 
-    );
+  );
 
-  };
+};
 
 
   // Stock Plus (Purchase)
-  const addStock = (
-    productName,
-    qty
-  ) => {
+  const addStock = async (productName, qty) => {
 
-    setProducts((prev) =>
+  const product = products.find(
+    (item) => item.name === productName
+  );
 
-      prev.map((item) =>
+  if (!product) {
+    console.log("Product not found");
+    return;
+  }
 
-        item.name === productName
+  await addProductStock(
+    product.id,
+    Number(qty)
+  );
 
+  setProducts((prev) =>
+    prev.map((item) =>
+      item.name === productName
         ? {
-
-          ...item,
-
-          stock:
-          Number(item.stock)
-          +
-          Number(qty),
-
-        }
-
+            ...item,
+            stock: Number(item.stock) + Number(qty),
+          }
         : item
-
-      )
-
-    );
-
-  };
+    )
+  );
+};
 
 
   return (

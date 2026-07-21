@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 
+import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
 import Purchase from "./pages/Purchase";
@@ -10,6 +11,9 @@ import Expenses from "./pages/Expenses";
 import OtherSell from "./pages/OtherSell";
 import Reports from "./pages/Reports";
 import Backup from "./pages/Backup";
+import Settings from "./pages/Settings";
+
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
 
@@ -17,59 +21,125 @@ function App() {
 
     <Routes>
 
+      {/* Login */}
+      <Route
+        path="/login"
+        element={<Login />}
+      />
+
+      {/* Owner */}
       <Route
         path="/"
-        element={<Dashboard />}
+        element={
+          <ProtectedRoute allowedRoles={["owner"]}>
+            <Dashboard />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/dashboard"
-        element={<Dashboard />}
-      />
-
-      <Route
-        path="/products"
-        element={<Products />}
+        element={
+          <ProtectedRoute allowedRoles={["owner"]}>
+            <Dashboard />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/purchase"
-        element={<Purchase />}
+        element={
+          <ProtectedRoute allowedRoles={["owner"]}>
+            <Purchase />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/raw-materials"
-        element={<RawMaterials />}
+        element={
+          <ProtectedRoute allowedRoles={["owner"]}>
+            <RawMaterials />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/suppliers"
-        element={<Suppliers />}
-      />
-
-      <Route
-        path="/sales"
-        element={<Sales />}
+        element={
+          <ProtectedRoute allowedRoles={["owner"]}>
+            <Suppliers />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/expenses"
-        element={<Expenses />}
+        element={
+          <ProtectedRoute allowedRoles={["owner"]}>
+            <Expenses />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/other-sell"
-        element={<OtherSell />}
+        element={
+          <ProtectedRoute allowedRoles={["owner"]}>
+            <OtherSell />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/reports"
-        element={<Reports />}
+        element={
+          <ProtectedRoute allowedRoles={["owner"]}>
+            <Reports />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute allowedRoles={["owner"]}>
+            <Settings />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/backup"
-        element={<Backup />}
+        element={
+          <ProtectedRoute allowedRoles={["owner"]}>
+            <Backup />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Products : Owner + Production */}
+      <Route
+        path="/products"
+        element={
+          <ProtectedRoute
+            allowedRoles={["owner", "production"]}
+          >
+            <Products />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Sales : Owner + Sales */}
+      <Route
+        path="/sales"
+        element={
+          <ProtectedRoute
+            allowedRoles={["owner", "sales"]}
+          >
+            <Sales />
+          </ProtectedRoute>
+        }
       />
 
     </Routes>

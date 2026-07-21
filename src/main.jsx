@@ -12,7 +12,7 @@ import { SalesProvider } from "./context/SalesContext.jsx";
 import { ExpenseProvider } from "./context/ExpenseContext.jsx";
 import { OtherSellProvider } from "./context/OtherSellContext.jsx";
 import { CustomerProvider } from "./context/CustomerContext.jsx";
-
+import { AuthProvider } from "./context/AuthContext.jsx";
 
 ReactDOM.createRoot(
   document.getElementById("root")
@@ -22,35 +22,39 @@ ReactDOM.createRoot(
 
     <BrowserRouter>
 
-      <ProductProvider>
+      <AuthProvider>
 
-        <RawMaterialProvider>
+        <ProductProvider>
 
-          <PurchaseProvider>
+          <RawMaterialProvider>
 
-            <SalesProvider>
+            <PurchaseProvider>
 
-              <ExpenseProvider>
+              <SalesProvider>
 
-                <OtherSellProvider>
+                <ExpenseProvider>
 
-                  <CustomerProvider>
+                  <OtherSellProvider>
 
-                    <App />
+                    <CustomerProvider>
 
-                  </CustomerProvider>
+                      <App />
 
-                </OtherSellProvider>
+                    </CustomerProvider>
 
-              </ExpenseProvider>
+                  </OtherSellProvider>
 
-            </SalesProvider>
+                </ExpenseProvider>
 
-          </PurchaseProvider>
+              </SalesProvider>
 
-        </RawMaterialProvider>
+            </PurchaseProvider>
 
-      </ProductProvider>
+          </RawMaterialProvider>
+
+        </ProductProvider>
+
+      </AuthProvider>
 
     </BrowserRouter>
 

@@ -19,3 +19,29 @@ export async function loginUser(username, password) {
   return await response.json();
 
 }
+
+// Change Password
+export async function changePassword(
+  username,
+  password
+) {
+
+  const response = await fetch(
+    "http://localhost:5000/users/password",
+    {
+      method: "PUT",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    }
+  );
+
+  return await response.json();
+
+}

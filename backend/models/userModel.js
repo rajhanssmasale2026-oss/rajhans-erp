@@ -35,3 +35,29 @@ exports.getAllUsers = async () => {
   return result.rows;
 
 };
+
+// Change Password
+exports.changePassword = async (
+  username,
+  password
+) => {
+
+  const result = await pool.query(
+    `
+    UPDATE users
+    SET password = $1
+    WHERE username = $2
+    RETURNING
+      id,
+      username,
+      role
+    `,
+    [
+      password,
+      username,
+    ]
+  );
+
+  return result.rows[0];
+
+};

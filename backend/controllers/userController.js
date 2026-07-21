@@ -60,3 +60,34 @@ exports.getUsers = async (req, res) => {
   }
 
 };
+
+// Change Password
+exports.changePassword = async (req, res) => {
+
+  try {
+
+    const { username, password } = req.body;
+
+    const user =
+      await userModel.changePassword(
+        username,
+        password
+      );
+
+    res.json({
+      success: true,
+      user,
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
+  }
+
+};

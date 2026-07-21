@@ -2,7 +2,7 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 
 import BusinessSettings from "../components/BusinessSettings";
-import UserAccountSettings from "../components/UserAccountSettings";
+import PasswordSettings from "../components/PasswordSettings";
 import AboutSettings from "../components/AboutSettings";
 
 function Settings() {
@@ -33,7 +33,7 @@ function Settings() {
 
           <BusinessSettings />
 
-          <UserAccountSettings />
+          <PasswordSettings />
 
           <AboutSettings />
 

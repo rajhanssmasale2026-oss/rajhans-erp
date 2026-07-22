@@ -1,4 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  getBusinessInfo,
+  saveBusinessInfo,
+} from "../services/settingsService";
 
 function BusinessSettings() {
 
@@ -12,6 +16,30 @@ function BusinessSettings() {
     fssai: "",
   });
 
+  useEffect(() => {
+    loadBusinessInfo();
+  }, []);
+
+  const loadBusinessInfo = async () => {
+
+    const data = await getBusinessInfo();
+
+    if (data) {
+
+      setBusiness({
+        businessName: data.business_name || "",
+        ownerName: data.owner_name || "",
+        mobile: data.mobile || "",
+        email: data.email || "",
+        address: data.address || "",
+        gst: data.gst || "",
+        fssai: data.fssai || "",
+      });
+
+    }
+
+  };
+
   const handleChange = (e) => {
 
     setBusiness({
@@ -21,11 +49,59 @@ function BusinessSettings() {
 
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
 
-    alert(
-      "Business Settings Saved Successfully"
-    );
+    const result = await saveBusinessInfo({
+
+      business_name: business.businessName,
+
+      owner_name: business.ownerName,
+
+      mobile: business.mobile,
+
+      email: business.email,
+
+      address: business.address,
+
+      gst: business.gst,
+
+      fssai: business.fssai,
+
+    });
+
+    if (result.success) {
+
+      alert("Business Information Saved Successfully");
+
+      loadBusinessInfo();
+
+    } else {
+
+      alert("Save Failed");
+
+    }
+
+  };
+
+  const handleClear = () => {
+
+    setBusiness({
+
+      businessName: "",
+
+      ownerName: "",
+
+      mobile: "",
+
+      email: "",
+
+      address: "",
+
+      gst: "",
+
+      fssai: "",
+
+    });
 
   };
 
@@ -104,12 +180,23 @@ function BusinessSettings() {
 
       </div>
 
-      <button
-        onClick={handleSave}
-        className="mt-6 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg"
-      >
-        Save Business Information
-      </button>
+      <div className="mt-6 flex gap-4">
+
+        <button
+          onClick={handleSave}
+          className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg"
+        >
+          💾 Save Business Information
+        </button>
+
+        <button
+          onClick={handleClear}
+          className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg"
+        >
+          🧹 Clear Form
+        </button>
+
+      </div>
 
     </div>
 

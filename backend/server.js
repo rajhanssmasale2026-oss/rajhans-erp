@@ -18,6 +18,7 @@ const reportRoutes = require("./routes/reportRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 const sellRoutes = require("./routes/sellRoutes");
 const userRoutes = require("./routes/userRoutes");
+const settingsRoutes = require("./routes/settingsRoutes");
 
 // Home
 app.get("/", (req, res) => {
@@ -68,6 +69,8 @@ app.use("/expenses", expenseRoutes);
 app.use("/sell", sellRoutes);
 
 app.use("/users", userRoutes);
+
+app.use("/settings", settingsRoutes);
 
 const PORT = process.env.PORT || 5000;
 

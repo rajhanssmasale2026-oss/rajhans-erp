@@ -104,8 +104,8 @@ function ProductTable({
 
                   <button
                     onClick={() =>
-                      onDelete(product.code)
-                    }
+  onDelete(product.id)
+}
                     style={{
                       background: "#dc2626",
                       color: "white",

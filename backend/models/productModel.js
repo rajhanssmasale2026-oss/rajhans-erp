@@ -1,6 +1,5 @@
 const pool = require("../db");
 
-
 // GET ALL PRODUCTS
 async function getAllProducts() {
 
@@ -12,7 +11,6 @@ async function getAllProducts() {
 
 }
 
-
 // ADD PRODUCT
 async function addProduct(product) {
 
@@ -20,10 +18,9 @@ async function addProduct(product) {
     code,
     name,
     weight,
-    salePrice,
+    sale_price,
     stock,
   } = product;
-
 
   const result = await pool.query(
 
@@ -35,28 +32,34 @@ async function addProduct(product) {
       sale_price,
       stock
     )
-
     VALUES
     ($1,$2,$3,$4,$5)
-
     RETURNING *`,
 
     [
       code,
       name,
       weight,
-      salePrice,
+      sale_price,
       stock,
     ]
 
   );
 
-
   return result.rows[0];
 
 }
 
+// DELETE PRODUCT
+async function deleteProduct(id) {
 
+  await pool.query(
+    `DELETE FROM products
+     WHERE id = $1`,
+    [id]
+  );
+
+}
 
 // STOCK MINUS (SALE)
 async function updateStock(id, quantity) {
@@ -75,14 +78,11 @@ async function updateStock(id, quantity) {
 
   );
 
-
   return result.rows[0];
 
 }
 
-
-
-// STOCK PLUS (ADD STOCK / PURCHASE)
+// STOCK PLUS (ADD STOCK)
 async function addStock(id, quantity) {
 
   const result = await pool.query(
@@ -99,12 +99,33 @@ async function addStock(id, quantity) {
 
   );
 
-
   return result.rows[0];
 
 }
 
+// UPDATE SALE PRICE
+async function updateSalePrice(
+  code,
+  salePrice
+) {
 
+  const result = await pool.query(
+
+    `UPDATE products
+     SET sale_price = $1
+     WHERE code = $2
+     RETURNING *`,
+
+    [
+      salePrice,
+      code,
+    ]
+
+  );
+
+  return result.rows[0];
+
+}
 
 module.exports = {
 
@@ -112,8 +133,12 @@ module.exports = {
 
   addProduct,
 
+  deleteProduct,
+
   updateStock,
 
   addStock,
+
+  updateSalePrice,
 
 };

@@ -1,6 +1,5 @@
 import API_URL from "./api";
 
-
 // GET Products
 export async function getProducts() {
 
@@ -11,7 +10,6 @@ export async function getProducts() {
   return await res.json();
 
 }
-
 
 // ADD Product
 export async function addProduct(product) {
@@ -34,6 +32,19 @@ export async function addProduct(product) {
 
 }
 
+// DELETE Product
+export async function deleteProduct(id) {
+
+  const res = await fetch(
+    `${API_URL}/products/${id}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  return await res.json();
+
+}
 
 // STOCK MINUS (SALE)
 export async function updateProductStock(
@@ -66,7 +77,6 @@ export async function updateProductStock(
 
 }
 
-
 // STOCK PLUS (ADD STOCK)
 export async function addProductStock(
   id,
@@ -88,6 +98,37 @@ export async function addProductStock(
         id,
 
         quantity,
+
+      }),
+
+    }
+  );
+
+  return await res.json();
+
+}
+
+// UPDATE SALE PRICE
+export async function updateProductPrice(
+  code,
+  salePrice
+) {
+
+  const res = await fetch(
+    `${API_URL}/products/price`,
+    {
+
+      method: "PUT",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+
+        code,
+
+        salePrice,
 
       }),
 

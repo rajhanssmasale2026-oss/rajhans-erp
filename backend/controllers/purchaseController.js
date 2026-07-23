@@ -49,6 +49,31 @@ async function addPurchase(req, res) {
   }
 
 }
+// DELETE Purchase
+async function deletePurchase(req, res) {
+
+  try {
+
+    const { id } = req.params;
+
+    await purchaseModel.deletePurchase(id);
+
+    res.json({
+      success: true,
+      message: "Purchase Deleted Successfully",
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    res.status(500).json({
+      error: err.message,
+    });
+
+  }
+
+}
 
 
 
@@ -57,5 +82,7 @@ module.exports = {
   getPurchases,
 
   addPurchase,
+
+   deletePurchase,
 
 };

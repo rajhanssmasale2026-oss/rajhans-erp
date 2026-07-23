@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import {
   getPurchases,
   addPurchase as addPurchaseAPI,
+  deletePurchase as deletePurchaseAPI
 } from "../services/purchaseService";
 
 export const PurchaseContext = createContext();
@@ -21,7 +22,7 @@ export function PurchaseProvider({ children }) {
         setPurchases(
           data.map((item) => ({
             id: item.id,
-            date: item.purchase_date,
+            date: item.purchase_date.split("T")[0],
             billNo: item.bill_no,
             supplier: item.supplier,
             material: item.material,
@@ -53,11 +54,27 @@ useEffect(() => {
     ]);
   };
 
-  const deletePurchase = (id) => {
+  const deletePurchase = async (id) => {
+
+  try {
+
+    await deletePurchaseAPI(id);
+
     setPurchases((prev) =>
       prev.filter((item) => item.id !== id)
     );
-  };
+
+    alert("Purchase Deleted Successfully");
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Failed to Delete Purchase");
+
+  }
+
+};
 
   const updatePurchase = (id, data) => {
     setPurchases((prev) =>

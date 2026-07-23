@@ -1,17 +1,29 @@
 const pool = require("../db");
 
-
 // GET ALL PURCHASES
 async function getAllPurchases() {
 
-  const result = await pool.query(
-    "SELECT * FROM purchases ORDER BY id DESC"
-  );
+  const result = await pool.query(`
+
+    SELECT
+      id,
+      TO_CHAR(purchase_date, 'YYYY-MM-DD') AS purchase_date,
+      bill_no,
+      supplier,
+      material,
+      quantity,
+      rate,
+      total,
+      remarks,
+      created_at
+    FROM purchases
+    ORDER BY id DESC
+
+  `);
 
   return result.rows;
 
 }
-
 
 // ADD PURCHASE
 async function addPurchase(purchase) {
@@ -26,7 +38,6 @@ async function addPurchase(purchase) {
     total,
     remarks,
   } = purchase;
-
 
   const result = await pool.query(
 
@@ -60,17 +71,30 @@ async function addPurchase(purchase) {
 
   );
 
-
   return result.rows[0];
 
 }
 
+// DELETE PURCHASE
+async function deletePurchase(id) {
 
+  await pool.query(
+
+    `DELETE FROM purchases
+     WHERE id = $1`,
+
+    [id]
+
+  );
+
+}
 
 module.exports = {
 
   getAllPurchases,
 
   addPurchase,
+
+  deletePurchase,
 
 };

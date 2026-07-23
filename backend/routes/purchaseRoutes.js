@@ -10,4 +10,10 @@ router.get("/", purchaseController.getPurchases);
 // POST Purchase
 router.post("/", purchaseController.addPurchase);
 
+// DELETE Purchase
+router.delete(
+  "/:id",
+  purchaseController.deletePurchase
+);
+
 module.exports = router;

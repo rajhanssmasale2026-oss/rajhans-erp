@@ -38,20 +38,34 @@ function Products() {
 
   try {
 
-    const newProduct = {
-      code: `RJM${String(products.length + 1).padStart(3, "0")}`,
-      name: product.name,
-      weight: product.weight,
-      purchase_price: 0,
-      sale_price: Number(product.salePrice),
-      stock: Number(product.stock),
-    };
+    const maxCode = products.reduce((max, item) => {
+  const num = parseInt(item.code.replace("RJM", ""), 10);
+  return num > max ? num : max;
+}, 0);
 
-    await addProductAPI(newProduct);
+const newProduct = {
+  code: `RJM${String(maxCode + 1).padStart(3, "0")}`,
+  name: product.name,
+  weight: product.weight,
+  purchase_price: 0,
+  sale_price: Number(product.salePrice),
+  stock: Number(product.stock),
+};
 
-    alert("Product Saved Successfully");
+    const result = await addProductAPI(newProduct);
 
-    window.location.reload();
+console.log(result);
+
+if (result.error) {
+
+  alert(result.error);
+  return;
+
+}
+
+alert("Product Saved Successfully");
+
+window.location.reload();
 
   } catch (err) {
 
@@ -60,6 +74,21 @@ function Products() {
     alert("Error Saving Product");
 
   }
+
+};
+const handlePriceSave = (
+  code,
+  newPrice,
+  effectiveFrom
+) => {
+
+  updateSalePrice(
+    code,
+    newPrice,
+    effectiveFrom
+  );
+
+  setSelectedProduct(null);
 
 };
 
@@ -175,12 +204,13 @@ function Products() {
   className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded"
 >
   ✏️ Edit Price
-  <button
+</button>
+
+<button
   onClick={() => setHistoryProduct(item)}
   className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded"
 >
   📜 History
-</button>
 </button>
 
                       <button
@@ -200,7 +230,7 @@ function Products() {
                               `Delete ${item.name} ?`
                             )
                           ) {
-                            deleteProduct(item.code);
+                            deleteProduct(item.id);
                           }
 
                         }}

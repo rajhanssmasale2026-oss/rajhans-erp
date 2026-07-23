@@ -5,9 +5,22 @@ const pool = require("../db");
 exports.getSales = async (req, res) => {
   try {
 
-    const salesResult = await pool.query(
-      "SELECT * FROM sales ORDER BY id DESC"
-    );
+    const salesResult = await pool.query(`
+  SELECT
+    id,
+    invoice_no,
+    TO_CHAR(sale_date, 'YYYY-MM-DD') AS sale_date,
+    customer,
+    mobile,
+    total,
+    payment_mode,
+    remarks,
+    created_at,
+    paid_amount,
+    remaining_amount
+  FROM sales
+  ORDER BY id DESC
+`);
 
     const sales = salesResult.rows;
 

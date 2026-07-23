@@ -5,7 +5,12 @@ exports.getAllSell = async () => {
 
   const result = await pool.query(
     `
-    SELECT *
+    SELECT
+      id,
+      TO_CHAR(sell_date, 'YYYY-MM-DD') AS sell_date,
+      item_name,
+      amount,
+      created_at
     FROM other_sell
     ORDER BY id DESC
     `

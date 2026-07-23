@@ -4,6 +4,8 @@ import {
   getProducts,
   updateProductStock,
   addProductStock,
+  updateProductPrice,
+  deleteProduct as deleteProductAPI,
 } from "../services/productService";
 
 export const ProductContext = createContext();
@@ -110,68 +112,83 @@ export function ProductProvider({ children }) {
 
 
   // Delete Product
-  const deleteProduct = (code) => {
+const deleteProduct = async (id) => {
+
+  try {
+
+    await deleteProductAPI(id);
 
     setProducts((prev) =>
       prev.filter(
-        (item) => item.code !== code
+        (item) => item.id !== id
       )
     );
 
-  };
+    alert("Product Deleted Successfully");
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Failed to Delete Product");
+
+  }
+
+};
 
 
   // Update Sale Price
-  const updateSalePrice = (
+  const updateSalePrice = async (
+  code,
+  salePrice,
+  effectiveFrom
+) => {
+
+  // Backend update
+  await updateProductPrice(
     code,
-    salePrice,
-    effectiveFrom
-  ) => {
+    salePrice
+  );
 
-    setProducts((prev) =>
+  // Frontend update
+  setProducts((prev) =>
 
-      prev.map((item) => {
+    prev.map((item) => {
 
-        if (item.code !== code)
-          return item;
+      if (item.code !== code)
+        return item;
 
+      const history =
+        item.priceHistory || [];
 
-        const history =
-          item.priceHistory || [];
+      return {
 
+        ...item,
 
-        return {
+        salePrice: Number(salePrice),
 
-          ...item,
+        effectiveFrom,
 
-          salePrice: Number(salePrice),
+        priceHistory: [
 
-          effectiveFrom,
+          ...history,
 
-          priceHistory: [
+          {
+            salePrice: Number(salePrice),
+            effectiveFrom,
+            changedAt:
+              new Date().toLocaleString(),
+          },
 
-            ...history,
+        ],
 
-            {
-              salePrice:
-                Number(salePrice),
+      };
 
-              effectiveFrom,
+    })
 
-              changedAt:
-                new Date()
-                .toLocaleString(),
-            },
+  );
 
-          ],
-
-        };
-
-      })
-
-    );
-
-  };
+};
 
 
   // Stock Minus (Sales)

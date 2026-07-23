@@ -100,9 +100,11 @@ function Dashboard() {
                 </li>
 
 
-                <li>
-                  👥 Customers : {customers.length}
-                </li>
+                {/*
+<li>
+  👥 Customers : {customers.length}
+</li>
+*/}
 
 
               </ul>

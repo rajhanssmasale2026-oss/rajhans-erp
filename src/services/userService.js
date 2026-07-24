@@ -1,7 +1,6 @@
 export async function loginUser(username, password) {
-
   const response = await fetch(
-    "http://localhost:5000/users/login",
+    "https://rajhans-erp.onrender.com/users/login",
     {
       method: "POST",
 
@@ -17,17 +16,12 @@ export async function loginUser(username, password) {
   );
 
   return await response.json();
-
 }
 
 // Change Password
-export async function changePassword(
-  username,
-  password
-) {
-
+export async function changePassword(username, password) {
   const response = await fetch(
-    "http://localhost:5000/users/password",
+    "https://rajhans-erp.onrender.com/users/password",
     {
       method: "PUT",
 
@@ -43,5 +37,4 @@ export async function changePassword(
   );
 
   return await response.json();
-
 }
